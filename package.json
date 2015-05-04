@@ -1,0 +1,26 @@
+{
+  "name": "luxury-brand-service",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "nodemon --debug ./bin/www",
+    "test": "grunt test"
+  },
+  "dependencies": {
+    "express": "~4.2.0",
+    "bcrypt-nodejs": "0.0.3",
+    "body-parser": "~1.0.0",
+    "cookie-parser": "~1.0.1",
+    "debug": "~0.7.4",
+    "ejs": "~0.8.5",
+    "express-session": "^1.7.6",
+    "mongoose": "~3.8.13",
+    "morgan": "~1.0.0",
+    "passport": "^0.2.0",
+    "passport-local": "^1.0.0",
+    "static-favicon": "~1.0.0"
+  },
+  "engines": {
+    "node": ">=0.10.0"
+  }
+}

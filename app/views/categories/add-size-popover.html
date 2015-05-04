@@ -1,0 +1,18 @@
+<div class="popover">
+  <div class="arrow"></div>
+  <h3 class="popover-title">Add Size</h3>
+  <div class="popover-content">
+  	<div class="row">
+  		<div class="col-md-12">
+  			<input type="text" class="form-control" ng-model="newSize.description" placeholder="Description">
+  		</div>
+  	</div>
+  	<div class="row">
+  		<div class="col-md-12">	
+  			<div class="pull-right">
+  				<button class="btn btn-primary" ng-click="editor.addSize(newSize); $hide(); newSize = {}">Add <i class="fa fa-plus"></i></button>
+  			</div>
+  		</div>
+  	</div>
+  </div>
+</div>

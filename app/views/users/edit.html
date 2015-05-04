@@ -1,0 +1,40 @@
+<div class="container">
+	<div class="row">
+		<legend>Edit {{editor.user.username}}'s data</legend>
+	</div>
+	<form class="form-horizontal" role="form">
+	  <div class="form-group">
+	    <label for="" class="col-md-2 control-label">Name</label>
+	    <div class="col-md-10">
+	      <input type="text" class="form-control" id="" placeholder="" ng-model="editor.user.username">
+	    </div>
+	  </div>
+	  <div class="form-group">
+	    <label for="" class="col-md-2 control-label">Bio</label>
+	    <div class="col-md-10">
+	      <textarea type="text" class="form-control" id="" placeholder="" ng-model="editor.user.bio"></textarea>
+	    </div>
+	  </div>
+	  <div class="form-group">
+	    <label for="" class="col-md-2 control-label">Country</label>
+	    <div class="col-md-4">
+	      <input type="text" class="form-control" id="" placeholder="" ng-model="editor.user.country"/>
+	    </div>
+	  </div>
+	
+	<div class="row">
+		<div class="col-md-12">
+		  <div class="col-md-10 col-md-offset-2">
+			  <div drop-zone ng-model="editor.user.profilePhoto"></div>
+			  <input type="file" file-input ng-model="editor.user.profilePhoto">
+		  </div>
+		</div>
+	</div>
+	  <div class="form-group">
+	    <div class="pull-right">
+	      <a ui-sref="products.list" class="btn btn-default" >Cancel</a>
+	      <button ng-click="editor.update(editor.user)" class="btn btn-primary">Save</button>
+	    </div>
+	  </div>
+	</form>
+</div>

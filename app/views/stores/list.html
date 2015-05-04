@@ -1,0 +1,66 @@
+
+<div class="row">
+  <div class="col-md-12">
+    <h1>Stores</h1>
+  </div>
+</div>
+
+<div class="row">
+  <form class="form-horizontal well" role="form">
+    <div class="form-group">
+      <label for="" class="col-md-2 control-label">Store name</label>
+      <div class="col-md-2">
+        <input type="text" class="form-control" ng-model="list.filters.name" id="" placeholder="">
+      </div>
+      <label for="" class="col-md-2 control-label">Category</label>
+      <div class="col-md-2">
+        <select name="" id="" class="form-control" ng-model="list.filters.category" ng-options="category as category for category in list.categoriesSet">
+          <option value=""></option>
+        </select>
+      </div>
+      <label for="" class="col-md-2 control-label">Location</label>
+      <div class="col-md-2">
+        <select name="" id="" class="form-control" ng-model="list.filters.location" ng-options="location as location for location in list.locationsSet">
+          <option value=""></option>
+        </select>
+      </div>
+    </div>
+  </form>
+</div>
+
+<div class="row">
+     <div class="col-md-6"ng-repeat="store in filteredStores = (list.stores | filter: list.storesFilterFn) ">
+      <div class="panel panel-success">
+        <div class="panel-heading">{{ store.name }}</div>
+        <div class="panel-body">
+         <div class="col-md-6">
+            <img src="{{ store.photo.content}}" alt="" class="img-thumbnail">
+         </div>
+         <div class="col-md-6">
+            <div class="row">
+              <div class="col-md-12">
+                {{store.location}}
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <a href="http://{{ store.web }}" target="_blank" > {{ store.web }} </a>                
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <div class="col-md-4" ng-repeat="category in store.categories"><span class="label label-success"> {{ category.title }}</span></div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <div class="pull-right">
+                  <a class="btn btn-primary btn-sm" href="#/stores/edit/{{ store._id }}" >Edit</a>
+                </div>
+              </div>
+            </div>
+         </div>
+        </div>
+      </div>
+  </div>
+</div>
