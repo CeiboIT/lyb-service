@@ -1,0 +1,7 @@
+{
+    "predef": ["angular", "document", "sessionStorage", "$", "_"],
+    "strict": false,
+    "-W097": false,
+    "node": true
+} 
+ 
