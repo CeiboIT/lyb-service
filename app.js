@@ -40,7 +40,7 @@ app.use(cookieParser());
 app.use(passportConf.initialize);
 app.use(passportConf.session);
 app.use(express.static(path.join(__dirname, 'app')));
-
+app.use('/bower_components', express.static(path.join(__dirname, '/bower_components')));
 //Routes front
 app.use('/', routes);
 
