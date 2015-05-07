@@ -24,7 +24,9 @@ angular
     'stores',
     'categories',
     'users',
-    'statistics'
+    'statistics',
+    'entityManager',
+    'angularModalService'
   	])
   .constant('apiBaseUrl', 'http://' + window.location.host)
   .config(['$stateProvider','$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
@@ -56,16 +58,22 @@ angular
       url: '/edit/:storeId',
       templateUrl: 'views/stores/edit.html',
       controller: 'storeEditionController as editor',
-      resolve : {
-        store : function(storesService, $stateParams) {
-          var storeId = $stateParams.storeId;
-          return storesService.getStoreById(storeId)
+      resolve: {
+        store: function(storesService, $stateParams) {
+            var storeId = $stateParams.storeId;
+            return storesService.getStoreById(storeId)
         },
 
-        categories : function(categoriesService) {
-          return categoriesService.retrieveAll()
+        categories: function(categoriesService) {
+            return categoriesService.retrieveAll()
         }
       }
+    })
+
+    .state('stores.create', {
+        url: '/create',
+        templateUrl: 'views/stores/create.html',
+        controller: 'storesCreateController as editor'
     })
 
     /*** CATEGORIES ***/
