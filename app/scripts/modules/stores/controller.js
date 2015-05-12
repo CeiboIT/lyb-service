@@ -24,7 +24,7 @@
 
 	angular.module('stores')
 		.run(function(loadTemplate) {
-			loadTemplate('/views/stores/list.html');
+			loadTemplate('/views/stores/create.html', 'store_create');
 		})
 		.controller('StoreViewController', StoreViewController);
 }());
