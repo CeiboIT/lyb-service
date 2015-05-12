@@ -1,0 +1,91 @@
+<div class="modal-header" >
+  <button type="button" class="close">
+    <span class="glyphicon glyphicon-question-sign" ></span>
+  </button>
+    <h4 class="modal-title">Store</h4>
+</div>
+
+<form name="entityForm" novalidate class="css-form form-horizontal" ng-submit="createController.ok()">
+
+<div class="modal-body">
+
+  <div class="container-fluid" ng-class="{ hidden: createController.entityErrors.length > 0 } ">
+    <div class="form-group">
+      <label for="" class="col-md-2 control-label">Name</label>
+      <div class="col-md-8">
+        <input type="text" class="form-control" id="" placeholder="" ng-model="createController.entity.name">
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="" class="col-md-2 control-label">Location</label>
+      <div class="col-md-8">
+        <input type="text" class="form-control" id="" placeholder="" ng-model="createController.entity.location"/>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="" class="col-md-2 control-label">Phone</label>
+      <div class="col-md-8">
+        <input type="text" class="form-control" id="" placeholder="" ng-model="createController.entity.phone"/>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="" class="col-md-2 control-label">Email</label>
+      <div class="col-md-8">
+        <input type="text" class="form-control" id="" placeholder="" ng-model="createController.entity.email"/>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="" class="col-md-2 control-label">Web</label>
+      <div class="col-md-8">
+        <input type="text" class="form-control" id="" placeholder="" ng-model="createController.entity.web"/>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="col-md-8 col-md-offset-2">
+          <!-- <div drop-zone ng-model="createController.entity.photo"></div> -->
+          <!-- <input type="file" file-input ng-model="createController.entity.photo"> -->
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="" class="col-md-2 control-label">Categories</label>
+      <div class="col-md-3">
+        <input type="text" class="form-control" ng-model="newCategory" ng-options="category.description for category in createController.categories" bs-typeahead>
+      </div>
+      <div class="col-md-2">
+        <button type="button" class="btn btn-success" ng-click="createController.addCategory(newCategory); newCategory = {};"><i class="fa fa-plus"></i>&nbsp;Add category</button>
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="col-md-8 col-md-offset-2">
+        <div class="col-md-3" ng-repeat="category in createController.entity.categories">
+          <div class="btn-group">
+            <button type="button" class="btn">{{category.description}}</button>
+            <button type="button" class="btn btn-danger" ng-click="createController.removeCategory(category)"><i class="fa fa-trash-o"></i></button>
+          </div>
+        </div>
+      </div>
+    </div>
+    </div> <!-- container -->
+</div> <!-- modal-body -->
+
+<div class="modal-footer">
+  <a class="btn btn-danger"
+     ng-class="{ hidden: createController.entityErrors.length == 0 }"
+     ng-click="createController.cancel()"> Close </a>
+  
+  <!-- https://docs.angularjs.org/api/ng/directive/form#submitting-a-form-and-preventing-the-default-action -->
+  <a class="btn btn-default"
+     ng-click="createController.cancel()"
+     ng-class="{ 'hidden': createController.entityErrors.length > 0 }">
+      Cancel
+  </a> <!-- van anchors porque si es button, submitea el form -->
+  
+  <button id="ok_button"
+    type="submit"
+    ng-class="{ 'hidden': createController.entityErrors.length > 0 }"
+    ng-disabled="createController.entityForm.$invalid || createController.isClean()"
+    class="btn btn-success">Save</button>
+</div>
+</form>

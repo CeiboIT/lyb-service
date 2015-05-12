@@ -1,0 +1,21 @@
+<div class="popover" ng-controller="CategoriesCreateController as editor">
+  <div class="arrow"></div>
+  <h3 class="popover-title">Add category</h3>
+  <div class="popover-content">
+  	<div class="row">
+  		<div class="col-md-12">
+  			<input type="text" class="form-control" ng-model="editor.entity.description">
+  		</div>
+  	</div>
+  	<div class="row">
+  		<div class="col-md-12">	
+  			<div class="pull-right">
+  				<button class="btn btn-primary" 
+                  ng-click="editor.ok($hide);">
+                    Add <i class="fa fa-plus"></i>
+          </button>
+  			</div>
+  		</div>
+  	</div>
+  </div>
+</div>
