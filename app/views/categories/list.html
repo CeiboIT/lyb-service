@@ -1,57 +1,57 @@
-
+<!-- CategoryViewController as entityController -->
 <div class="row">
   <div class="col-md-12">
-    <h1>Categories</h1>
+    <h1>{{entityController.entityManager.listName}}</h1>
   </div>
 </div>
 
 <div class="row">
   <form class="form-horizontal well" role="form">
     <div class="form-group">
-      <label for="" class="col-md-2 control-label">Description</label>
+      <label class="col-md-2 control-label">Title</label>
       <div class="col-md-2">
-        <input type="text" class="form-control" ng-model="list.filters.description" id="" placeholder="">
+        <input type="text" class="form-control" 
+               ng-model="entityController.filters.title">
+      </div>
+      <label class="col-md-2 control-label">Description</label>
+      <div class="col-md-2">
+        <input type="text" class="form-control" 
+               ng-model="entityController.filters.description">
       </div>
     </div>
   </form>
 </div>
 <div class="row">
  <div class="col-md-12">
-    <button type="button" class="btn btn-sm btn-success" data-template="views/categories/categories-popover.html" data-animation="am-flip-x" data-container="body" bs-popover>Add category</button>
+    <button ng-click="entityController.entityManager.create()"
+            class="btn btn-success pull-right btn-sm" > 
+            {{entityController.entityManager.newName}}
+    </button>
  </div>
 </div>
 <br>
 
 <div class="row">
   <div class="col-md-12">
-    <div class="col-md-6"ng-repeat="category in filteredCategories = (list.categories | filter: list.categoriesFilterFn)">
+    <div  class="col-md-6" 
+          ng-repeat="entity in entityController.entityManager.entities | filter: entityController.entityManager.filterFn">
       <div class="panel panel-success">
-        <div class="panel-heading">{{ category.title }}</div>
+        <div class="panel-heading">{{ entity.title }}</div>
         <div class="panel-body">
-         <div class="col-md-6">
+          <div class="col-md-6">
+            {{entity.description}}
             <img src="{{ store.photo.content}}" alt="" class="img-thumbnail">
-         </div>
-         <div class="row">
-            <div ng-repeat="subCategory in category.subCategories">
-              <span class="label label-success">{{ category.description }}</span>
-            </div>
-         </div>
-          <div class="row">
-            <div class="col-md-12">
-              <div class="pull-right">
-                <a class="btn btn-primary btn-sm" href="#/categories/edit/{{ category._id }}" >Edit</a>
-              </div>
+          </div>
+          <div class="col-md-12">
+            <div class="pull-right">
+              <a class="btn btn-primary btn-sm" 
+                 ng-click="entityController.entityManager.edit(entity)">
+                  Edit
+              </a>
             </div>
           </div>
         </div>
       </div>
-  </div>
-</div>
-<br>
-<div class="row">
-  <div class="col-md-12">
-    <div class="pull-right">
-      <button class="btn btn-primary">Save</button>
     </div>
   </div>
 </div>

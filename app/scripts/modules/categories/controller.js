@@ -1,69 +1,45 @@
-(function(){
+(function() {
 
-	'use strict'
+	'use strict';
 
-	var categoriesListController = function(categoriesList, auxFunctions) {
-		var list = this;
+	var CategoryViewController = function ($templateCache, categoryService, entityManagerView) {
+		// Controller for the Category view
+		var categoryController = this;
 
-		//filters
-		
-		list.filters = {
-			description: null
-		}
+		var opts = {
+	        entityService: categoryService,
+	        createTemplate: $templateCache.get('category_create'),
+	        listName: 'Categories',
+	        scope: categoryController,
+	        newName: 'Add category',
+	        noResultsText: 'No results found'
+	    };
 
-		//Filter function
-		list.categoriesFilterFn = function(category) {
-		    if(list.filters.description && category.description && (category.description.toLowerCase().indexOf(list.filters.description.toLowerCase()) == -1) ) {
-		        return false;
-		    };
-
-		    return true;
+		categoryController.filters = {
+			title: '',
+			description: ''
 		};
 
-		list.addCategory = function(newCategory) {
-			auxFunctions.addElement(list.categories, newCategory, "description", { notAllowRepeated: true });
-		};
+		var filterCategories = function (entity) { 
+            return entity.title.match(categoryController.filters.title) ||
+                entity.description.match(categoryController.filters.description);
+    	};
 
-		list.removeSubCategory = function(category){
-			auxFunctions.removeElement(list.categories, category);
-		};
-
-		//Initialization Control
-		function init() {
-			list.categories = categoriesList;
-		};
-
-		init();
+		entityManagerView.createFor(opts)
+			.then(function(entityManager) {
+				categoryController.entityManager = entityManager;
+				categoryController.entityManager.filterFn = filterCategories;
+			});
 	};
 
-	var categoryCreationCtrl = function(categoriesService) {
-
-	};
-
-	var categoryEditorCtrl = function(category, categoriesService, auxFunctions) {
-		var editor = this;
-
-		editor.category = category;
-
-		editor.addSize = function(newSize) {
-			auxFunctions.addElement(editor.category.properties.sizes, newSize, "description", { notAllowRepeated: true });
-		}
-
-		editor.removeSize = function(newSize) {
-			auxFunctions.removeElement(editor.category.properties.sizes, newSize);
-		}
-
-		function init(){
-			editor.category.properties = {
-				sizes: []
-			}
-		}
-
-		init();
-	};
+	var loadTemplate = function ($http, $templateCache) {
+		$http.get('/views/categories/create.html')
+    		.then(function (response) {
+     		   $templateCache.put('category_create', response.data);
+    		});
+    };
 
 	angular.module('categories')
-		.controller('categoriesListController', categoriesListController)
-		.controller('categoryCreationCtrl', categoryCreationCtrl)
-		.controller('categoryEditorCtrl', categoryEditorCtrl)
-})();
+		.run(loadTemplate)
+		.controller('CategoryViewController', CategoryViewController);
+}());
