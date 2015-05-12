@@ -58,7 +58,16 @@
 
 	};
 
-	angular.module('utils')
-		.service('auxFunctions', utilsFunctionsService);
+	var loadTemplate = function ($http, $templateCache) {
+		return function (templateUrl, templateName) {
+			$http.get(templateUrl)
+	    		.then(function (response) {
+	     		   $templateCache.put(templateName, response.data);
+	    		});
+		};
+    };
 
+	angular.module('utils')
+		.factory('loadTemplate', loadTemplate)
+		.service('auxFunctions', utilsFunctionsService);
 }());

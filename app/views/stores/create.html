@@ -42,19 +42,25 @@
     </div>
     <div class="row">
       <div class="col-md-12">
-        <div class="col-md-8 col-md-offset-2">
+        <!-- <div class="col-md-8 col-md-offset-2">
           <div drop-zone ng-model="createController.entity.photo"></div>
           <input type="file" file-input ng-model="createController.entity.photo">
-        </div>
+        </div> -->
       </div>
     </div>
     <div class="form-group">
       <label for="" class="col-md-2 control-label">Categories</label>
       <div class="col-md-3">
-        <input type="text" class="form-control" ng-model="newCategory" ng-options="category.description for category in createController.categories" bs-typeahead>
+        <input type="text" class="form-control" 
+               ng-model="newCategory" 
+               ng-options="category.description for category in createController.categories"
+               bs-typeahead>
       </div>
       <div class="col-md-2">
-        <button type="button" class="btn btn-success" ng-click="createController.addCategory(newCategory); newCategory = {};"><i class="fa fa-plus"></i>&nbsp;Add category</button>
+        <button type="button" class="btn btn-success" 
+                ng-click="createController.addCategory(newCategory); newCategory = {};">
+                <i class="fa fa-plus"></i>&nbsp;Add category
+        </button>
       </div>
     </div>
     <div class="form-group">
