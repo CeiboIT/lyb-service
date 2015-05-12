@@ -1,10 +1,10 @@
-(function(){
-
+(function() {
+	'use strict';
 	/**
 	* utils Module
 	*
 	* Description
 	*/
-	angular.module('utils', [])
+	angular.module('utils', []);
 
-})()
+}());
