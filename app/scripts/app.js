@@ -17,7 +17,7 @@ angular
   	'ui.router',
     'ceibo.ui',
     'ceibo.d3',
-    'mgcrea.ngStrap',
+    // 'mgcrea.ngStrap',
     'smart-table',
     'fileReaderModule',
     'utils',
@@ -25,179 +25,141 @@ angular
     'categories',
     'users',
     'statistics',
-    'entityManager',
-    'angularModalService'
+    'restServices',
+    'restangular',
+    'entityViews',
+    'ui.bootstrap'
   	])
   .constant('apiBaseUrl', 'http://' + window.location.host)
-  .config(['$stateProvider','$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
+  .config(['$stateProvider','$urlRouterProvider', '$httpProvider',
+    function ($stateProvider, $urlRouterProvider, $httpProvider) {
 
-  $urlRouterProvider.otherwise('/stores/list');
-  
-  $stateProvider
+    $httpProvider.interceptors.push('responseErrorInterceptor');
 
-    /*** STORES ***/
+    $urlRouterProvider.otherwise('/stores/list');
+    
+    $stateProvider
 
-    .state('stores', {
-      url: '/stores',
-      abstract : true,
-      template: '<ui-view/>'
-    })
+      /*** STORES ***/
 
-  	.state('stores.list', {
-  	  url: '/list',
-  	  templateUrl: 'views/stores/list.html',
-  	  controller: 'storesListController as list',
-  	  resolve : {
-  	  	storesList : function(storesService) {
-  	  		return storesService.retrieveAll()
-  	  	}
-  	  }
-  	})
+      .state('stores', {
+        url: '/stores',
+        abstract : true,
+        template: '<ui-view/>'
+      })
 
-    .state('stores.edition', {
-      url: '/edit/:storeId',
-      templateUrl: 'views/stores/edit.html',
-      controller: 'storeEditionController as editor',
-      resolve: {
-        store: function(storesService, $stateParams) {
-            var storeId = $stateParams.storeId;
-            return storesService.getStoreById(storeId)
-        },
+    	.state('stores.list', {
+    	  url: '/list',
+    	  templateUrl: 'views/stores/list.html',
+    	  controller: 'StoreViewController as entityController'
+    	})
+      
+      /*** CATEGORIES ***/
 
-        categories: function(categoriesService) {
-            return categoriesService.retrieveAll()
+      .state('categories', {
+        url: '/categories',
+        abstract : true,
+        template: '<ui-view/>'
+      })
+
+      .state('categories.list', {
+        url: '/list',
+        templateUrl: 'views/categories/list.html',
+        controller: 'CategoryViewController as entityController'
+      })
+
+      /***PRODUCTS ***/
+
+      .state('products', {
+        url: '/products',
+        abstract : true,
+        template: '<ui-view/>'
+      })
+
+      .state('products.list', {
+        url: '/list',
+        templateUrl: 'views/products/list.html',
+        controller: 'productsListController as list',
+        resolve : {
+          productsList : function(productsService) {
+            return productsService.retrieveAll();
+          }
         }
-      }
-    })
+      })
 
-    .state('stores.create', {
-        url: '/create',
-        templateUrl: 'views/stores/create.html',
-        controller: 'storesCreateController as editor'
-    })
+      .state('products.edition', {
+        url: '/edit/:productId',
+        templateUrl: 'views/products/edit.html',
+        controller: 'productEditionController as editor',
+        resolve : {
+          product : function(productsService, $stateParams) {
+            var productId = $stateParams.productId;
+            return productsService.getProductById(productId);
+          },
 
-    /*** CATEGORIES ***/
-
-    .state('categories', {
-      url: '/categories',
-      abstract : true,
-      template: '<ui-view/>'
-    })
-
-    .state('categories.list', {
-      url: '/list',
-      templateUrl: 'views/categories/list.html',
-      controller: 'categoriesListController as list',
-      resolve : {
-        categoriesList : function(categoriesService) {
-          return categoriesService.retrieveAll()
+          categories : function(categoriesService) {
+            return categoriesService.retrieveAll();
+          }
         }
-      }
-    })
+      })
 
-    .state('categories.editor', {
-      url: '/edit/:categoryId',
-      templateUrl: 'views/categories/main-category-editor.html',
-      controller: 'categoryEditorCtrl as editor',
-      resolve : {
-        category : function(categoriesService, $stateParams) {
-          var categoryId = $stateParams.categoryId;
-          return categoriesService.getCategoryById(categoryId)
+      /*** USERS ***/
+
+      .state('users', {
+        url: '/users',
+        abstract : true,
+        template: '<ui-view/>'
+      })
+
+      .state('users.list', {
+        url: '/list',
+        templateUrl: 'views/users/list.html',
+        controller: 'usersListController as list',
+        resolve : {
+          usersList : function(usersService) {
+            return usersService.retrieveAll();
+          }
         }
-      }
-    })
+      })
 
-    .state('categories.create', {
-      url: '/create',
-      templateUrl: 'views/categories/editor.html',
-      controller: 'categoryCreationCtrl as editor',
-    })
-
-
-    /***PRODUCTS ***/
-
-    .state('products', {
-      url: '/products',
-      abstract : true,
-      template: '<ui-view/>'
-    })
-
-    .state('products.list', {
-      url: '/list',
-      templateUrl: 'views/products/list.html',
-      controller: 'productsListController as list',
-      resolve : {
-        productsList : function(productsService) {
-          return productsService.retrieveAll()
+      .state('users.edition', {
+        url: '/edit/:username',
+        templateUrl: 'views/users/edit.html',
+        controller: 'userEditorController as editor',
+        resolve : {
+          user : function(usersService, $stateParams) {
+            var username = $stateParams.username;
+            return usersService.getUserByName(username);
+          }
         }
-      }
-    })
+      })
 
-    .state('products.edition', {
-      url: '/edit/:productId',
-      templateUrl: 'views/products/edit.html',
-      controller: 'productEditionController as editor',
-      resolve : {
-        product : function(productsService, $stateParams) {
-          var productId = $stateParams.productId;
-          return productsService.getProductById(productId)
-        },
+      /*** ***/ 
 
-        categories : function(categoriesService) {
-          return categoriesService.retrieveAll()
+      .state('stats', {
+        url: '/stats',
+        abstract : true,
+        template: '<ui-view/>'
+      })
+
+      .state('stats.general', {
+        url: '/general',
+        templateUrl: 'views/statistics/stats.html',
+        controller: 'statisticsController as stats',
+       resolve : {
+          data : function(statsService) {
+            return statsService.getSystemStats();
+          }
         }
-      }
-    })
+      });
+    }])
+    .factory('responseErrorInterceptor', function ($q, $log) {
+        return {
+            responseError: function (responseError) {
+                $log.error('responseErrorInterceptor > ' + JSON.stringify(responseError));
+                return $q.reject(responseError);
+            }
+        };
+    });
 
-    /*** USERS ***/
-
-    .state('users', {
-      url: '/users',
-      abstract : true,
-      template: '<ui-view/>'
-    })
-
-    .state('users.list', {
-      url: '/list',
-      templateUrl: 'views/users/list.html',
-      controller: 'usersListController as list',
-      resolve : {
-        usersList : function(usersService) {
-          return usersService.retrieveAll()
-        }
-      }
-    })
-
-    .state('users.edition', {
-      url: '/edit/:username',
-      templateUrl: 'views/users/edit.html',
-      controller: 'userEditorController as editor',
-      resolve : {
-        user : function(usersService, $stateParams) {
-          var username = $stateParams.username;
-          return usersService.getUserByName(username)
-        }
-      }
-    })
-
-    /*** ***/ 
-
-    .state('stats', {
-      url: '/stats',
-      abstract : true,
-      template: '<ui-view/>'
-    })
-
-    .state('stats.general', {
-      url: '/general',
-      templateUrl: 'views/statistics/stats.html',
-      controller: 'statisticsController as stats',
-     resolve : {
-        data : function(statsService) {
-          return statsService.getSystemStats()
-        }
-      }
-    })
-  }])
-
-})()
+}());

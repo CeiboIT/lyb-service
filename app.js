@@ -6,7 +6,7 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var cors = require('cors');
 var session = require('express-session');
-var passportConf = require('./configs/passport')
+var passportConf = require('./configs/passport');
 //Routes managers
 var routes = require('./routes/index');
 
