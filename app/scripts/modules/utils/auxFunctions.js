@@ -2,7 +2,8 @@
 
 	var utilsFunctionsService = function() {
 
-		/* Generates a set from a given collection, useful for iterate over this set when we want to give an autocomplete component or similar */
+		/* Generates a set from a given collection, useful for iterate over 
+		this set when we want to give an autocomplete component or similar */
 		this.generateSet = function(collection, key, subKey) {
 			var set = [];
 			if(key && subKey) {
@@ -11,28 +12,27 @@
 						angular.forEach(element[subKey], function(subElement){
 							if(set.indexOf(subElement[key]) == -1) {
 								set.push(subElement[key]);
-							};
-						})
+							}
+						});
 					} else {
 						if(set.indexOf(element[subKey][key]) == -1 ) {
 							set.push(element[subKey][key]);
-						};
+						}
 					}
-				})
+				});
 			} else if(key) {
 				angular.forEach(collection, function(element){
 					if(set.indexOf(element[key]) == -1) {
 						set.push(element[key]);
 					}
-				})
+				});
 			} else {
 				angular.forEach(collection, function(element){
 					if(set.indexOf(element) == -1) {
 						set.push(element);
 					}
-				})
+				});
 			}
-
 			return set;
 		};
 
@@ -42,23 +42,23 @@
 						if(collection[i][property] == element) {
 							return false;
 						}
-					};
-					collection.push(element)
+					}
+					collection.push(element);
 				} else {
-					collection.push(element)
-				};
+					collection.push(element);
+				}
 
-				return true
+				return true;
 		};
 
 		this.removeElement = function(collection, element) {
 			var index = collection.indexOf(element);
 			collection.splice(index, 1);
-		}
+		};
 
-	}
+	};
 
 	angular.module('utils')
-		.service('auxFunctions', utilsFunctionsService)
+		.service('auxFunctions', utilsFunctionsService);
 
-})();
+}());
