@@ -19,7 +19,7 @@ EntityViews.controller('RemoveEntityDialogController',
                     $modalInstance.close();
                     $scope.$emit('guiweb.waiting', { waiting: false });
                 }, function () {
-                    $scope.entityErrors = [{text: 'Mmmmm, algo inesperado ocurrio. Por favor, intentar nuevamente.' }];
+                    $scope.entityErrors = [{text: 'Mmmmm, something went wrong, please try again.' }];
                     //FINALLY?
                     $scope.$emit('guiweb.waiting', { waiting: false });
                 });
@@ -80,7 +80,7 @@ EntityViews.factory('createOrUpdateDialog', function ($modal) {
         createFor: function (options) {
             var modalInstance = $modal.open({
                 template: options.createTemplate,
-                size: options.size || 'sm',
+                size: options.size || 'md',
                 controller: 'CreateOrUpdateDialogController',
                 controllerAs: 'createController',
                 resolve: options.resolve || {
@@ -122,7 +122,7 @@ EntityViews.factory('entityManagerView', function (createOrUpdateDialog, removeD
                     createOrUpdateDialog.createFor({
                         entity: entity,
                         scope: options.scope,
-                        size: options.size || 'sm',
+                        size: options.size,
                         createTemplate: options.createTemplate,
                         original: options.entityService.copy(entity),
                         action: function () {
@@ -139,7 +139,7 @@ EntityViews.factory('entityManagerView', function (createOrUpdateDialog, removeD
                         entity: newEntity,
                         createTemplate: options.createTemplate,
                         original: {},
-                        size: options.size || 'sm',
+                        size: options.size,
                         action: function () {
                             return options.entityService.save(newEntity);
                         }
