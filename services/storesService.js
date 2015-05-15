@@ -7,7 +7,10 @@ storeService.create = function(storeDetails, callback) {
 	var store = new Store(storeDetails);
 
 	store.save(function(err){
-		if(err) return err;
+		if(err) {
+			logger.error('storeService > create ' + err);
+			return err;
+		}
 		callback(200);
 	});
 };
@@ -36,16 +39,22 @@ storeService.getStoreById = function(storeId, callback) {
 
 };
 
+storeService.delete = function(storeId, callback) {
+	Store.findOne({'_id' : storeId}).
+	remove(function (err) {
+		if (err) {
+			logger.error('store > delete > ' , err);
+		}
+		callback(200);
+	});
+};
+		
 storeService.update= function(store, callback) {
 
-	// for (var i = store.categories.length - 1; i >= 0; i--) {
-	// 	store.categories[i] = store.categories[i]._id;
-	// }
-
-	// store.owner = store.owner._id;
-
-	Store.findByIdAndUpdate(store._id,
-		{ $set: { name: store.name }},
+	var storeId = store._id;
+	delete store._id;
+	Store.findByIdAndUpdate(storeId,
+		store,
 		function(err, store){
 			if(err) {
 				logger.error('storeService.update', err);

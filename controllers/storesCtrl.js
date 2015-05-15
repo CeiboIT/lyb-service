@@ -13,9 +13,9 @@ router.get('/', function(req, res){
 	});
 });
 
-router.get('/get-store-by-id', function(req, res){
-	var productId = req.query.storeId;
-	storesService.getStoreById(productId, function(response){
+router.delete('/:id', function(req, res){
+	var storeId = req.params.id;
+	storesService.delete(storeId, function(response){
 		res.send(response);
 	});
 });
