@@ -1,6 +1,5 @@
 .dropbox {
-	height: 300px;
-	width: 300px;
-
-	border: solid red 2px;
+	height: 230px;
+	width: 230px;
+	border: dashed #a94442 2px;
 }

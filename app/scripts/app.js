@@ -27,7 +27,9 @@ angular
     'restServices',
     'restangular',
     'entityViews',
-    'ui.bootstrap'
+    'ui.bootstrap',
+    'ui.select', 
+    'ngSanitize'
   	])
   .constant('apiBaseUrl', 'http://' + window.location.host)
   .config(['$stateProvider','$urlRouterProvider', '$httpProvider',
