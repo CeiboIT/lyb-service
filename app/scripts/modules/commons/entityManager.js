@@ -1,27 +1,21 @@
 var EntityViews = angular.module('entityViews', []);
 
-EntityViews.run(function ($http, $templateCache) {
-    $http.get('/views/commons/entity_list.html')
-        .then(function (response) {
-            $templateCache.put('entity_list', response.data);
-        });
+EntityViews.run(function (loadTemplate) {
+    // load templates into $templateCache
+    loadTemplate('/views/commons/entity_list.html', 'entity_list');
+    loadTemplate('/views/commons/confirm.html', 'entity_remove_confirm');
 });
 
-
 EntityViews.controller('RemoveEntityDialogController', 
-   function ($scope, $modalInstance, action, confirmText) {
-
+   function ($scope, $log,  $modalInstance, action, confirmText) {
         $scope.confirmText = confirmText;
         $scope.ok = function () {
-            $scope.$emit('guiweb.waiting', { waiting: true });
             action()
-                .then( function () {
+                .then(function () {
                     $modalInstance.close();
-                    $scope.$emit('guiweb.waiting', { waiting: false });
-                }, function () {
+                }, function (error) {
+                    $log.error('RemoveEntityDialogController > action ' + JSON.stringify(error));
                     $scope.entityErrors = [{text: 'Mmmmm, something went wrong, please try again.' }];
-                    //FINALLY?
-                    $scope.$emit('guiweb.waiting', { waiting: false });
                 });
         };
 
@@ -48,23 +42,42 @@ EntityViews.factory('removeDialog', function ($modal, $templateCache) {
     };
 });
 
+// EntityViews.factory('createOrUpdateBase', function () {
+//     return {
+//         isClean: function (original, entity) {
+//             return angular.equals(original, entity);
+//         },
+//         ok: function (action, entity, entityErrors) {
+//             $log.debug('CreateOrUpdateDialogController > ' + action);
+//             action(entity)
+//                 .then(function (response) {
+//                     $modalInstance.close(response);
+//                 }, function (error) {
+//                     $log.error('CreateOrUpdateDialogController > ' + error);
+//                     entityErrors = [{text: 'Mmmmm, something went wrong, please try again.' }];
+//                 });
+//         };        
+//     }
+// });
+
 // The popup create a new scope, but inherit from a user specified scope.
-EntityViews.controller('CreateOrUpdateDialogController', 
-    function ($modalInstance, entity, original, action) {
-        
+EntityViews.controller('CreateOrUpdateController', 
+    function ($log, $modalInstance, createOrUpdateMixin) {
         var controller = this; 
-        controller.entity = entity;
+        angular.extend(controller, createOrUpdateMixin);
         controller.entityErrors = [];
 
         controller.isClean = function () {
-            return angular.equals(original, controller.entity);
+            return angular.equals(controller.original, controller.entity);
         };
 
         controller.ok = function () {
-            action(controller.entity)
-                .then( function (response) {
+            $log.debug('CreateOrUpdateDialogController > ' + controller.action);
+            controller.action(controller.entity)
+                .then(function (response) {
                     $modalInstance.close(response);
-                }, function () {
+                }, function (error) {
+                    $log.error('CreateOrUpdateDialogController > ' + error);
                     controller.entityErrors = [{text: 'Mmmmm, something went wrong, please try again.' }];
                 });
         };
@@ -74,21 +87,21 @@ EntityViews.controller('CreateOrUpdateDialogController',
         };
     });
 
+
 // Factory to decouple $modal implementation from entityManager view.
 EntityViews.factory('createOrUpdateDialog', function ($modal) {
     return {
         createFor: function (options) {
+            // angular.extends(CreateOrUpdateController, options.createOrUpdateMixin);
             var modalInstance = $modal.open({
                 template: options.createTemplate,
                 size: options.size || 'md',
-                controller: 'CreateOrUpdateDialogController',
+                controller: 'CreateOrUpdateController',
                 controllerAs: 'createController',
-                resolve: options.resolve || {
-                    action: function () {
-                        return options.action;
-                    },
-                    entity: function () { return options.entity; },
-                    original: function () { return options.original; }
+                resolve: {
+                    createOrUpdateMixin: function () {
+                        return options.createOrUpdateMixin;
+                    }
                 }
             });
             // No funciona modalInstance.opened.then( function () { $timeout(function () { angular.element('.first_input').focus(); }, 500); });
@@ -100,6 +113,13 @@ EntityViews.factory('createOrUpdateDialog', function ($modal) {
 EntityViews.factory('entityManagerView', function (createOrUpdateDialog, removeDialog, $log) {
     return {
         createFor: function (options) {
+            function _createOrUpdateDialog() {
+                return createOrUpdateDialog.createFor({
+                    createTemplate: options.createTemplate,
+                    size: options.size,
+                    createOrUpdateMixin: options.createOrUpdateMixin
+                });
+            }
             var crudOps = {
                 updateList: function () {
                     return options.entityService.getAll()
@@ -119,57 +139,35 @@ EntityViews.factory('entityManagerView', function (createOrUpdateDialog, removeD
                     });
                 },
                 edit: function (entity) {
-                    createOrUpdateDialog.createFor({
-                        entity: entity,
-                        scope: options.scope,
-                        size: options.size,
-                        createTemplate: options.createTemplate,
+                    angular.extend(options.createOrUpdateMixin, {
                         original: options.entityService.copy(entity),
+                        entity: entity,
                         action: function () {
+                            // function to be applied when the "ok" button in the dialog is pressed
                             return options.entityService.update(entity);
                         }
-                    }).result.then( function () {
-                        crudOps.updateList();
-                    });        
+                    });
+                    _createOrUpdateDialog()
+                        .result.then(function () {
+                            crudOps.updateList();
+                        });        
                 },
                 create: function () {
-                    var newEntity = options.entityService.newEntity();
-                    options.scope.entity = newEntity;
-                    var response = createOrUpdateDialog.createFor({
+                    // open a dialog to create a new entity
+                    var newEntity = options.entityService.newEntity(); // new empty entity
+                    // add mixin to the base CreateOrUpdateController to provide additional functions
+                    angular.extend(options.createOrUpdateMixin, {
+                        original: {}, // used in the isClean function to check if the user make any change to the object
                         entity: newEntity,
-                        createTemplate: options.createTemplate,
-                        original: {},
-                        size: options.size,
-                        action: function () {
+                        action: function () { // function to be applied when the "ok" button in the dialog is pressed
                             return options.entityService.save(newEntity);
                         }
                     });
-                    response.result.then(function () {
-                        $log.debug('entityManager created new entity');
-                        crudOps.updateList();
-                    });
-                    return response.result;
-                },
-                getField:function getProperty(obj, prop) {
-                    // TODO documentacion?
-                    var parts = prop.split('.'),
-                        last = parts.pop(),
-                        l = parts.length,
-                        i = 1,
-                        current = parts[0];
-
-                    if (parts.length === 0) {
-                        return obj[prop];
-                    } 
-                    
-                    while((obj = obj[current]) && i < l) {
-                        current = parts[i];
-                        i++;
-                    }
-
-                    if(obj) {
-                        return obj[last];
-                    }
+                    _createOrUpdateDialog()
+                        .result.then(function () {
+                            $log.debug('entityManager created new entity');
+                            crudOps.updateList(); // update list after a change in the entity
+                        });
                 }
             };
             angular.extend(crudOps, options);

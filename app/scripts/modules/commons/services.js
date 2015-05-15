@@ -27,6 +27,9 @@ RestServices.factory('entityService', function ($q, Restangular, restConfig) {
                     return this.rest.getList();
                 },
                 update: function (entity) {
+                     if (formatters && formatters.preUpdate) {
+                        return formatters.preUpdate(entity).put();
+                    }
                     return entity.put();
                 },
                 save: function (entity) {
@@ -36,7 +39,8 @@ RestServices.factory('entityService', function ($q, Restangular, restConfig) {
                     return this.rest.post(entity);
                 },
                 remove: function (entity) {
-                    return this.rest.one('remove').one(entity.id.toString()).post(); 
+                    return entity.remove();
+                    // return this.rest.one('remove').one(entity.id.toString()).post(); 
                 },
                 createEntity: function () {
                     return this.rest.one();
