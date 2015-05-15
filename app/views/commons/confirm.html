@@ -1,0 +1,30 @@
+<div class="modal-header" >
+    <button type="button" class="close">
+        <span class="glyphicon glyphicon-question-sign" ></span>
+    </button>
+    <h4 class="modal-title">Remove</h4>
+</div>
+
+<div class="modal-body">
+    <div class="container-fluid">
+        <p ng-if="!entityErrors">{{confirmText}}</p>
+        <div ng-if="entityErrors" class="error-list">
+            <ul>
+                <li ng-repeat="errorItem in entityErrors">
+                    <i class="glyphicon glyphicon-warning-sign text-warning"></i> &nbsp; {{errorItem.text}}
+                </li>   
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="modal-footer">
+    <a class="btn btn-danger"
+        ng-if="entityErrors"
+        ng-click="cancel()"> Cancel </a>
+        
+    <a  class="btn btn-danger"
+       ng-class="{ 'hidden': entityErrors.length > 0 }" 
+       ng-click="ok()"> Remove </a>
+    
+</div>
