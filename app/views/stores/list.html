@@ -1,84 +1,62 @@
 <!-- StoreViewController as entityController -->
-<div class="row">
-  <div class="col-md-12">
-    <h1>{{entityController.entityManager.listName}}</h1>
-  </div>
-</div>
+<div class="spacer"></div>
+<ng-include src="'/views/stores/filters.html'"></ng-include>
+<div class="row line"></div>
+<div class="spacer"></div>
 
 <div class="row">
-  <form class="form-horizontal well" role="form">
-    <div class="form-group">
-      <label class="col-md-2 control-label">Store name</label>
-      <div class="col-md-2">
-        <input type="text" class="form-control" 
-               ng-model="entityController.filters.name">
-      </div>
-      <label class="col-md-2 control-label">Category</label>
-      <div class="col-md-2">
-        <select class="form-control" 
-                ng-model="entityController.filters.category" 
-                ng-options="category as category for category in entityController.categoriesSet">
-          <option value=""></option>
-        </select>
-      </div>
-      <label class="col-md-2 control-label">Location</label>
-      <div class="col-md-2">
-        <select class="form-control" 
-                ng-model="entityController.filters.location" 
-                ng-options="location as location for location in entityController.locationsSet">
-          <option value=""></option>
-        </select>
-      </div>
-    </div>
-  </form>
-</div>
-<div class="row spacer">
-  <div class="col-sm-12">
-      <button ng-click="entityController.entityManager.create()"
-            class="btn btn-success btn-sm col-md-2" > 
-            {{entityController.entityManager.newName}}
-    </button>
-  </div>
-</div>
-<div class="row">
-     <div class="col-md-6" 
-          ng-repeat="store in entityController.entityManager.entities | filter: entityController.entityManager.filterFn">
+  <div class="col-md-6" 
+       ng-repeat="store in entityController.entityManager.entities | filter: entityController.entityManager.filterFn">
       <div class="panel panel-success">
         <div class="panel-heading">{{store.name}}</div>
         <div class="panel-body">
-         <div class="col-md-6">
-            <img src="{{store.photo.content}}" alt="" class="img-thumbnail">
-         </div>
-         <div class="col-md-6">
-            <div class="row">
-              <div class="col-md-12">
-                {{store.location}}
-              </div>
+          <div class="row">
+            
+            <div class="col-md-6">
+              <!-- <ng-if "{{store.photo.content}}" > -->
+                <img src="{{store.photo.content}}" alt="" class="img-thumbnail">
+              <!-- </ng-if> -->
             </div>
-            <div class="row">
-              <div class="col-md-12">
-                <a href="http://{{store.web}}" target="_blank" > {{store.web}} </a>                
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-md-12">
-                <div class="col-md-4" ng-repeat="category in store.categories">
-                  <span class="label label-success"> {{category.title}}</span>
+
+            <div class="col-md-6">
+              <div class="row">
+                <small>location</small>
+                <div class="col-md-12">
+                  {{store.location}}
                 </div>
               </div>
-            </div>
-            <div class="row">
-              <div class="col-md-12">
-                <div class="pull-right">
-                  <a  class="btn btn-primary btn-sm" 
-                      ng-click="entityController.entityManager.edit(store)">
-                      Edit
-                  </a>
+              <div class="row">
+                <small>web</small>
+                <div class="col-md-12">
+                  <a href="http://{{store.web}}" target="_blank" > {{store.web}} </a>                
                 </div>
               </div>
-            </div>
-         </div>
-        </div>
-      </div>
-  </div>
-</div>
+              <div class="row">
+                <small>categories</small>
+                <div class="col-md-12">
+                  <div class="col-md-4" ng-repeat="category in store.categories">
+                    <span class="label label-success"> {{category.title}}</span>
+                  </div>
+                </div>
+              </div>
+            </div> <!-- col-md-6 -->
+
+          </div> <!-- row -->
+          <div class="row">
+            <div class="col-md-12">
+              <div class="pull-right">
+                <a  class="btn btn-primary btn-sm" 
+                    ng-click="entityController.entityManager.edit(store)">
+                    Edit
+                </a>
+                <a  class="btn btn-danger btn-sm" 
+                    ng-click="entityController.entityManager.remove(store)">
+                    Remove
+                </a>
+              </div>
+            </div> <!-- col-md-12 -->
+          </div> <!-- row -->
+      </div> <!-- panel-body -->
+    </div> <!-- panel -->
+  </div> <!-- col-md-6 ng repeat-->
+</div> <!-- row -->

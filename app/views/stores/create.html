@@ -4,76 +4,97 @@
   </button>
     <h4 class="modal-title">Store</h4>
 </div>
-
-<form name="entityForm" novalidate class="css-form form-horizontal" ng-submit="createController.ok()">
+<form name="createController.entityForm" novalidate class="css-form form-horizontal" ng-submit="createController.ok()">
 
 <div class="modal-body">
 
   <div class="container-fluid" ng-class="{ hidden: createController.entityErrors.length > 0 } ">
-    <div class="form-group">
-      <label for="" class="col-md-2 control-label">Name</label>
-      <div class="col-md-8">
-        <input type="text" class="form-control" id="" placeholder="" ng-model="createController.entity.name">
-      </div>
-    </div>
-    <div class="form-group">
-      <label for="" class="col-md-2 control-label">Location</label>
-      <div class="col-md-8">
-        <input type="text" class="form-control" id="" placeholder="" ng-model="createController.entity.location"/>
-      </div>
-    </div>
-    <div class="form-group">
-      <label for="" class="col-md-2 control-label">Phone</label>
-      <div class="col-md-8">
-        <input type="text" class="form-control" id="" placeholder="" ng-model="createController.entity.phone"/>
-      </div>
-    </div>
-    <div class="form-group">
-      <label for="" class="col-md-2 control-label">Email</label>
-      <div class="col-md-8">
-        <input type="text" class="form-control" id="" placeholder="" ng-model="createController.entity.email"/>
-      </div>
-    </div>
-    <div class="form-group">
-      <label for="" class="col-md-2 control-label">Web</label>
-      <div class="col-md-8">
-        <input type="text" class="form-control" id="" placeholder="" ng-model="createController.entity.web"/>
-      </div>
-    </div>
     <div class="row">
-      <div class="col-md-12">
-        <!-- <div class="col-md-8 col-md-offset-2">
-          <div drop-zone ng-model="createController.entity.photo"></div>
-          <input type="file" file-input ng-model="createController.entity.photo">
-        </div> -->
+      <div class="col-md-8">
+        <div class="form-group" required>
+        <label for="" class="col-md-2 control-label">Name</label>
+        <div class="col-md-10">
+          <input type="text" required class="form-control" ng-model="createController.entity.name">
+        </div>
       </div>
-    </div>
-    <div class="form-group">
-      <label for="" class="col-md-2 control-label">Categories</label>
-      <div class="col-md-3">
-        <input type="text" class="form-control" 
-               ng-model="newCategory" 
-               ng-options="category.description for category in createController.categories"
-               bs-typeahead>
+      <div class="form-group">
+        <label for="" class="col-md-2 control-label">Location</label>
+        <div class="col-md-10">
+          <input type="text" class="form-control" id="" placeholder="" ng-model="createController.entity.location"/>
+        </div>
       </div>
-      <div class="col-md-2">
-        <button type="button" class="btn btn-success" 
-                ng-click="createController.addCategory(newCategory); newCategory = {};">
-                <i class="fa fa-plus"></i>&nbsp;Add category
-        </button>
+      <div class="form-group">
+        <label for="" class="col-md-2 control-label">Phone</label>
+        <div class="col-md-10">
+          <input type="text" class="form-control" id="" placeholder="" ng-model="createController.entity.phone"/>
+        </div>
       </div>
-    </div>
-    <div class="form-group">
-      <div class="col-md-8 col-md-offset-2">
-        <div class="col-md-3" ng-repeat="category in createController.entity.categories">
-          <div class="btn-group">
-            <button type="button" class="btn">{{category.description}}</button>
-            <button type="button" class="btn btn-danger" ng-click="createController.removeCategory(category)"><i class="fa fa-trash-o"></i></button>
+      <div class="form-group">
+        <label for="" class="col-md-2 control-label">Email</label>
+        <div class="col-md-10">
+          <input type="text" class="form-control" id="" placeholder="" ng-model="createController.entity.email"/>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="" class="col-md-2 control-label">Web</label>
+        <div class="col-md-10">
+          <input type="text" class="form-control" id="" placeholder="" ng-model="createController.entity.web"/>
+        </div>
+      </div>  
+      </div>
+      <div class="col-md-4">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="col-md-10">
+              <div drop-zone ng-model="createController.entity.photo"></div>
+              <input type="file" file-input ng-model="createController.entity.photo">
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </div> <!-- row -->
+    <div class="row">
+      <div class="col-md-8">
+        <div class="form-group">
+          <label for="" class="col-md-2 control-label">Categories</label>
+          <div class="col-md-8">
+            <ui-select ng-model="createController.newCategory" 
+                       close-on-select="true"
+                       theme="bootstrap">
+              <ui-select-match> {{$select.selected.title}} </ui-select-match>
+              <ui-select-choices repeat="category in createController.categories">
+                <span ng-bind-html="category.title | highlight: $select.search"></span>
+              </ui-select-choices>
+            </ui-select>
+          </div>
+          <div class="col-md-2">
+            <button type="button" class="btn btn-success" 
+                    ng-click="createController.addCategory(createController.entity, createController.newCategory)">
+                    <i class="fa fa-plus"></i>&nbsp;
+            </button>
+          </div>
+        </div>
+      </div> <!-- md-6 -->
+      <div class="col-md-4"> </div>
+      <div class="row">
+        <div class="form-group">
+          <div class="col-md-10 col-md-offset-1">
+            <div class="col-md-3" ng-repeat="category in createController.entity.categories">
+              <div class="btn-group">
+                <!-- <button type="button" class="btn">{{categoryId | fromNative:createController.categories:'_id':'title' }}</button> -->
+                <button type="button" class="btn">{{category.title}}</button>
+                <button type="button" class="btn btn-danger" 
+                        ng-click="createController.removeCategory(createController.entity, category)">
+                  <i class="fa fa-trash-o"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        </div> <!-- row -->
+      </div><!-- row -->
     </div> <!-- container -->
+    <!-- <pre>{{createController.entity}}</pre> -->
 </div> <!-- modal-body -->
 
 <div class="modal-footer">
