@@ -4,8 +4,7 @@
 	</button>
     <h4 class="modal-title">Category</h4>
 </div>
-
-<form name="entityForm" novalidate class="css-form form-horizontal" ng-submit="createController.ok()">
+<form name="createController.entityForm" novalidate class="css-form form-horizontal" ng-submit="createController.ok()">
     <div class="modal-body">
         <div class="container-fluid" ng-class="{ hidden: createController.entityErrors.length > 0 } ">
             <div class="form-group required">
@@ -34,7 +33,6 @@
             </ul>
         </div>
     </div> <!-- modal body -->
-    
     <div class="modal-footer">
         <a class="btn btn-danger"
            ng-class="{ hidden: createController.entityErrors.length == 0 }"
@@ -46,7 +44,6 @@
            ng-class="{ 'hidden': createController.entityErrors.length > 0 }">
             Cancel
         </a> <!-- van anchors porque si es button, submitea el form -->
-        
         <button id="ok_button"
                 type="submit"
                 ng-class="{ 'hidden': createController.entityErrors.length > 0 }"

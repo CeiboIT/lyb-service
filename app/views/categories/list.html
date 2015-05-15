@@ -1,40 +1,13 @@
 <!-- CategoryViewController as entityController -->
-<div class="row">
-  <div class="col-md-12">
-    <h1>{{entityController.entityManager.listName}}</h1>
-  </div>
-</div>
-
-<div class="row">
-  <form class="form-horizontal well" role="form">
-    <div class="form-group">
-      <label class="col-md-2 control-label">Title</label>
-      <div class="col-md-2">
-        <input type="text" class="form-control" 
-               ng-model="entityController.filters.title">
-      </div>
-      <label class="col-md-2 control-label">Description</label>
-      <div class="col-md-2">
-        <input type="text" class="form-control" 
-               ng-model="entityController.filters.description">
-      </div>
-    </div>
-  </form>
-</div>
-<div class="row">
- <div class="col-md-12">
-    <button ng-click="entityController.entityManager.create()"
-            class="btn btn-success pull-right btn-sm" > 
-            {{entityController.entityManager.newName}}
-    </button>
- </div>
-</div>
-<br>
+<div class="spacer"></div>
+<ng-include src="'/views/categories/filters.html'"></ng-include>
+<div class="row line"></div>
+<div class="spacer"></div>
 
 <div class="row">
   <div class="col-md-12">
-    <div  class="col-md-6" 
-          ng-repeat="entity in entityController.entityManager.entities | filter: entityController.entityManager.filterFn">
+    <div class="col-md-6" 
+         ng-repeat="entity in entityController.entityManager.entities | filter: entityController.entityManager.filterFn">
       <div class="panel panel-success">
         <div class="panel-heading">{{ entity.title }}</div>
         <div class="panel-body">
