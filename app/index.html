@@ -44,35 +44,20 @@
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
           <ul class="nav navbar-nav">
-            <li class="dropdown">
-              <a class="dropdown-toggle" data-toggle="dropdown">Products <span class="caret"></span></a>
-              <ul class="dropdown-menu" role="menu">
-                <li><a ui-sref="products.list">List</a></li>
-              </ul>
+            <li>
+              <a ui-sref="products.list">Products</a>
             </li>
-            <li class="dropdown">
-              <a class="dropdown-toggle" data-toggle="dropdown">Categories <span class="caret"></span></a>
-              <ul class="dropdown-menu" role="menu">
-                <li><a ui-sref="categories.list">List</a></li>
-              </ul>
+            <li>
+              <a ui-sref="categories.list">Categories</a>
             </li>
-            <li class="dropdown">
-              <a class="dropdown-toggle" data-toggle="dropdown">Users <span class="caret"></span></a>
-              <ul class="dropdown-menu" role="menu">
-                <li><a ui-sref="users.list">List</a></li>
-              </ul>
+            <li>
+              <a ui-sref="users.list">Users</a>
             </li>
-            <li class="dropdown">
-              <a class="dropdown-toggle" data-toggle="dropdown">Stores <span class="caret"></span></a>
-              <ul class="dropdown-menu" role="menu">
-                <li><a ui-sref="stores.list">List</a></li>
-              </ul>
+            <li>
+              <a ui-sref="stores.list">Stores</a>
             </li>
-            <li class="dropdown">
-              <a class="dropdown-toggle" data-toggle="dropdown">Stats <span class="caret"></span></a>
-              <ul class="dropdown-menu" role="menu">
-                <li><a ui-sref="stats.general">General</a></li>
-              </ul>
+            <li>
+              <a ui-sref="stats.general">Stats</a>
             </li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
@@ -90,7 +75,7 @@
       <div class="container" ui-view=""></div>
 
       <div class="footer">
-        <div class="container">
+        <div class="container text-right">
           LYB CSM by Emiliano Potignano
         </div>
       </div>
@@ -134,7 +119,6 @@
     <script src="bower_components/lodash/lodash.min.js"></script>
     <script src="bower_components/angular-sanitize/angular-sanitize.min.js"></script>
     <script src="bower_components/angular-ui-select/dist/select.min.js"></script>
-    
     <script src="lib/ui-bootstrap-custom-tpls-0.13.0.min.js"></script>
 
     <!-- endbower -->
