@@ -139,6 +139,7 @@ EntityViews.factory('entityManagerView', function (createOrUpdateDialog, removeD
                     });
                 },
                 edit: function (entity) {
+                    options.createOrUpdateMixin = options.createOrUpdateMixin || {};
                     angular.extend(options.createOrUpdateMixin, {
                         original: options.entityService.copy(entity),
                         entity: entity,
@@ -153,6 +154,7 @@ EntityViews.factory('entityManagerView', function (createOrUpdateDialog, removeD
                         });        
                 },
                 create: function () {
+                    options.createOrUpdateMixin = options.createOrUpdateMixin || {};
                     // open a dialog to create a new entity
                     var newEntity = options.entityService.newEntity(); // new empty entity
                     // add mixin to the base CreateOrUpdateController to provide additional functions
