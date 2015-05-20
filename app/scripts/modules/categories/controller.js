@@ -12,7 +12,8 @@
 	        listName: 'Categories',
 	        scope: categoryController,
 	        newName: 'Add category',
-	        noResultsText: 'No results found'
+	        noResultsText: 'No results found',
+	        confirmText: 'Are you sure?'
 	    };
 
 		categoryController.filters = {
