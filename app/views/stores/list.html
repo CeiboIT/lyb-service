@@ -14,29 +14,27 @@
             
             <div class="col-md-6">
               <!-- <ng-if "{{store.photo.content}}" > -->
-                <img src="{{store.photo.content}}" alt="" class="img-thumbnail">
+                <img ng-src="{{store.photo.content}}" alt="store image" class="img-thumbnail store-listed-image">
               <!-- </ng-if> -->
             </div>
 
             <div class="col-md-6">
               <div class="row">
-                <small>location</small>
+                <small class="text-muted">location</small>
                 <div class="col-md-12">
                   {{store.location}}
                 </div>
               </div>
               <div class="row">
-                <small>web</small>
+                <small class="text-muted">web</small>
                 <div class="col-md-12">
                   <a href="http://{{store.web}}" target="_blank" > {{store.web}} </a>                
                 </div>
               </div>
               <div class="row">
-                <small>categories</small>
+                <small class="text-muted">categories</small>
                 <div class="col-md-12">
-                  <div class="col-md-4" ng-repeat="category in store.categories">
-                    <span class="label label-success"> {{category.title}}</span>
-                  </div>
+                    <span class="label label-success category-listed" ng-repeat="category in store.categories">{{category.title}}</span>
                 </div>
               </div>
             </div> <!-- col-md-6 -->

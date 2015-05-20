@@ -9,16 +9,11 @@
 	    type: 'jpeg'
 	};
 	
-	var storeService = function (entityService) {
-		var preSave = function (entity) {
-			// collect the _id attributes from object Category
-			entity.categories = _.pluck(entity.categories, '_id');
-			return entity;
-		};
+	var storeService = function (entityService, collectCategoryId) {
 		var formatters = {
 			// befor send the entity to the server, this function will be applyed
-			preSave: preSave,
-			preUpdate: preSave 
+			preSave: collectCategoryId,
+			preUpdate: collectCategoryId 
 		};
 
 		var service = entityService.getCrudFor('stores', formatters);
