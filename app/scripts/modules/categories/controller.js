@@ -2,7 +2,8 @@
 
 	'use strict';
 
-	var CategoryViewController = function ($templateCache, categoryService, entityManagerView) {
+	var CategoryViewController = 
+		function ($templateCache, categoryService, entityManagerView) {
 		// Controller for the Category view
 		var categoryController = this;
 
@@ -10,7 +11,6 @@
 	        entityService: categoryService,
 	        createTemplate: $templateCache.get('category_create'),
 	        listName: 'Categories',
-	        scope: categoryController,
 	        newName: 'Add category',
 	        noResultsText: 'No results found',
 	        confirmText: 'Are you sure?'

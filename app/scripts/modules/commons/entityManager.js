@@ -42,29 +42,13 @@ EntityViews.factory('removeDialog', function ($modal, $templateCache) {
     };
 });
 
-// EntityViews.factory('createOrUpdateBase', function () {
-//     return {
-//         isClean: function (original, entity) {
-//             return angular.equals(original, entity);
-//         },
-//         ok: function (action, entity, entityErrors) {
-//             $log.debug('CreateOrUpdateDialogController > ' + action);
-//             action(entity)
-//                 .then(function (response) {
-//                     $modalInstance.close(response);
-//                 }, function (error) {
-//                     $log.error('CreateOrUpdateDialogController > ' + error);
-//                     entityErrors = [{text: 'Mmmmm, something went wrong, please try again.' }];
-//                 });
-//         };        
-//     }
-// });
-
 // The popup create a new scope, but inherit from a user specified scope.
 EntityViews.controller('CreateOrUpdateController', 
-    function ($log, $modalInstance, createOrUpdateMixin) {
-        var controller = this; 
-        angular.extend(controller, createOrUpdateMixin);
+    function ($log, $modalInstance, applyMixins, createOrUpdateMixins) {
+        var controller = this;
+
+        applyMixins(controller, createOrUpdateMixins);
+
         controller.entityErrors = [];
 
         controller.isClean = function () {
@@ -99,14 +83,23 @@ EntityViews.factory('createOrUpdateDialog', function ($modal) {
                 controller: 'CreateOrUpdateController',
                 controllerAs: 'createController',
                 resolve: {
-                    createOrUpdateMixin: function () {
-                        return options.createOrUpdateMixin;
+                    createOrUpdateMixins: function () {
+                        return options.createOrUpdateMixins;
                     }
                 }
             });
             // No funciona modalInstance.opened.then( function () { $timeout(function () { angular.element('.first_input').focus(); }, 500); });
             return modalInstance;
         }
+    };
+});
+
+EntityViews.factory('applyMixins', function () {
+    return function (dest, mixins) {
+        angular.forEach(mixins, function (mixin) {
+            angular.extend(dest, mixin);
+        });
+        return dest;
     };
 });
 
@@ -117,7 +110,7 @@ EntityViews.factory('entityManagerView', function (createOrUpdateDialog, removeD
                 return createOrUpdateDialog.createFor({
                     createTemplate: options.createTemplate,
                     size: options.size,
-                    createOrUpdateMixin: options.createOrUpdateMixin
+                    createOrUpdateMixins: options.createOrUpdateMixins
                 });
             }
             var crudOps = {
@@ -139,12 +132,11 @@ EntityViews.factory('entityManagerView', function (createOrUpdateDialog, removeD
                     });
                 },
                 edit: function (entity) {
-                    options.createOrUpdateMixin = options.createOrUpdateMixin || {};
-                    angular.extend(options.createOrUpdateMixin, {
+                    options.createOrUpdateMixins = options.createOrUpdateMixins || [];
+                    options.createOrUpdateMixins.push({
                         original: options.entityService.copy(entity),
                         entity: entity,
-                        action: function () {
-                            // function to be applied when the "ok" button in the dialog is pressed
+                        action: function () { // function to be applied when the "ok" button in the dialog is pressed
                             return options.entityService.update(entity);
                         }
                     });
@@ -154,17 +146,18 @@ EntityViews.factory('entityManagerView', function (createOrUpdateDialog, removeD
                         });        
                 },
                 create: function () {
-                    options.createOrUpdateMixin = options.createOrUpdateMixin || {};
+                    options.createOrUpdateMixins = options.createOrUpdateMixins || [];
                     // open a dialog to create a new entity
                     var newEntity = options.entityService.newEntity(); // new empty entity
                     // add mixin to the base CreateOrUpdateController to provide additional functions
-                    angular.extend(options.createOrUpdateMixin, {
+                    options.createOrUpdateMixins.push({
                         original: {}, // used in the isClean function to check if the user make any change to the object
                         entity: newEntity,
                         action: function () { // function to be applied when the "ok" button in the dialog is pressed
                             return options.entityService.save(newEntity);
                         }
                     });
+                    
                     _createOrUpdateDialog()
                         .result.then(function () {
                             $log.debug('entityManager created new entity');

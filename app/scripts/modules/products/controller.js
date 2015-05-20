@@ -7,17 +7,16 @@
 			categoryCreateOrUpdateMixin, photoMixin) {
 		
 		var productController = this,
-			mixins = angular.extend({}, categoryCreateOrUpdateMixin, photoMixin),
-			opts = {
-		        entityService: productsService,
-		        createTemplate: $templateCache.get('product_create'),
-		        listName: 'Products',
-		        createOrUpdateMixin: mixins,
-		        scope: productController,
-		        newName: 'Add product',
-		        noResultsText: 'No results found',
-		        confirmText: 'Are you sure?'
-		    };
+				opts = {
+			        entityService: productsService,
+			        createTemplate: $templateCache.get('product_create'),
+			        listName: 'Products',
+			        createOrUpdateMixins: [categoryCreateOrUpdateMixin(), photoMixin],
+			        scope: productController,
+			        newName: 'Add product',
+			        noResultsText: 'No results found',
+			        confirmText: 'Are you sure?'
+			    };
 
 		productController.filters = {
 			name: '',
