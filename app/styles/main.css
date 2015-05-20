@@ -27,3 +27,23 @@
 .text-normal {
 	font-weight: normal;
 }
+
+.store-listed-image {
+	max-height: 150px;
+}
+
+.product-list-image, .product-create-image {
+	min-height: 120px;
+	min-width: 120px;
+	max-height: 120px;
+	max-width: 120px;
+}
+
+.category-listed {
+	margin-right: 2%;
+}
+
+.footer {
+	right: 1%;
+	bottom: 5%;
+}
