@@ -21,6 +21,7 @@ angular
     'fileReaderModule',
     'utils',
     'stores',
+    'products',
     'categories',
     'users',
     'statistics',
@@ -80,28 +81,7 @@ angular
       .state('products.list', {
         url: '/list',
         templateUrl: 'views/products/list.html',
-        controller: 'productsListController as list',
-        resolve : {
-          productsList : function(productsService) {
-            return productsService.retrieveAll();
-          }
-        }
-      })
-
-      .state('products.edition', {
-        url: '/edit/:productId',
-        templateUrl: 'views/products/edit.html',
-        controller: 'productEditionController as editor',
-        resolve : {
-          product : function(productsService, $stateParams) {
-            var productId = $stateParams.productId;
-            return productsService.getProductById(productId);
-          },
-
-          categories : function(categoriesService) {
-            return categoriesService.retrieveAll();
-          }
-        }
+        controller: 'ProductViewController as entityController'
       })
 
       /*** USERS ***/
@@ -115,24 +95,7 @@ angular
       .state('users.list', {
         url: '/list',
         templateUrl: 'views/users/list.html',
-        controller: 'usersListController as list',
-        resolve : {
-          usersList : function(usersService) {
-            return usersService.retrieveAll();
-          }
-        }
-      })
-
-      .state('users.edition', {
-        url: '/edit/:username',
-        templateUrl: 'views/users/edit.html',
-        controller: 'userEditorController as editor',
-        resolve : {
-          user : function(usersService, $stateParams) {
-            var username = $stateParams.username;
-            return usersService.getUserByName(username);
-          }
-        }
+        controller: 'UserViewController as entityController'
       })
 
       /*** ***/ 
