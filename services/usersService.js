@@ -1,6 +1,6 @@
 var AbstractUsersTypes =  require('../schemas/usersSchema');
-
-var Users = AbstractUsersTypes.User
+var logger = console;
+var Users = AbstractUsersTypes.User;
 var Seller = AbstractUsersTypes.Seller;
 var Buyer = AbstractUsersTypes.Buyer;
 
@@ -14,7 +14,7 @@ var usersService = {
 				callback(response);
 			});
 	},
-	getUserByName : function(findUserName, callback ) {
+	getUserByName : function(findUserName, callback) {
 		var user = new Users({username : findUserName});
 		user.findByName(function(response){
 			callback(response);
@@ -25,76 +25,73 @@ var usersService = {
 		var user = new Users(usertoUpdate);
 		user.update(function(response){
 			callback(response);
-		})
+		});
 	}
 };
 
 //SELLERS
-usersService.Sellers= {
+usersService.Sellers = {
 
-	create : function(sellerData, callback) {
-		
+	create: function (sellerData, callback) {
 		var seller = new Seller(sellerData);
-			seller.createUser(sellerData, function(response){
-				//res.redirect('/login');
-				callback(response);
-			}, 'Seller')
-
-		},
-
-	findAll : function(callback) {
-
-		Seller.find({},function(err, response){
-				if(err) return err;
+		seller.createUser(sellerData, function(response){
+			//res.redirect('/login');
+			callback(response);
+		}, 'Seller');
+	},
+	findAll: function (callback) {
+		Seller.find({},
+			function (err, response) {
+				if(err) {
+					return err;
+				}
 				//res.redirect('/login');
 				callback(response);
 			});
-	},
-}
+	}
+};
 
 //BUYERS
 usersService.Buyers = {
 
-	create : function(buyerData, callback) {
-
+	create: function(buyerData, callback) {
 		var buyer = new Buyer(buyerData);
-			buyer.createUser(buyerData, function(response){
+			buyer.createUser(buyerData, function(response) {
 				//res.redirect('/login');
 				callback(200);
-			}, 'Buyer')
+			}, 'Buyer');
 	}, 
-
-	findAll : function(callback) {
-
+	findAll: function(callback) {
 		Buyer.find({}, function(err, response){
-				if(err) return err;
+				if(err) {
+					return err;
+				}
 				//res.redirect('/login');
 				callback(response);
 			});
-
 	},
-
-	likeItem : function(usertoUpdate, callback) {
-
-		Buyer.findByIdAndUpdate(usertoUpdate._id, { $set : { "user.likes.items" : usertoUpdate.likes.items }}, function(err, response){
+	likeItem: function(usertoUpdate, callback) {
+		Buyer.findByIdAndUpdate(usertoUpdate._id,
+		{ $set: { 'user.likes.items': usertoUpdate.likes.items }},
+		function(err, response) {
+			if (err) {
+				return err;
+			}
 			console.log(response);
-			res.send(response.status);
-		})
-
+			callback(response.status);
+		});
 	},
-
-	likeUser : function(usertoUpdate, callback) {
-
-		Buyer.findByIdAndUpdate(usertoUpdate._id, { $set : { "user.likes.users" : usertoUpdate.likes.users }}, function(err, response){
-			console.log(response);
-			res.send(response.status);
-		})
-
+	likeUser: function(usertoUpdate, callback) {
+		Buyer.findByIdAndUpdate(usertoUpdate._id,
+			{ $set: { 'user.likes.users': usertoUpdate.likes.users }},
+			function (err, response) {
+				if (err) {
+					logger.error(err);
+					return err;
+				}
+				callback(response.status);
+			});
 	}
-
-}
+};
 
 module.exports = usersService;
-
-
-

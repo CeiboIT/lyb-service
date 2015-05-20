@@ -30,13 +30,10 @@ angular.module('fileReaderModule', [])
 				ngModel : '=',
 				photoKey: '='
 			},
-			// controller: function($scope, $element, $attrs, $transclude) {},
 			 require: 'ngModel', // Array = multiple requires, ? = optional, ^ = check parent elements
 			 restrict: 'AE', // E = Element, A = Attribute, C = Class, M = Comment
 			 template: '<div class="dropbox" ng-show="!ngModel"></div><img class="dropbox" src="{{ ngModel.content || ngModel[photoKey].content }}" ng-show="ngModel"></img>',
 			 transclude: true,
-			// templateUrl: '',
-			// compile: function(tElement, tAttrs, function transclude(function(scope, cloneLinkingFn){ return function linking(scope, elm, attrs){}})),
 			link: function(scope, element, iAttrs) {
 				scope.photoKey = iAttrs.photoKey;
 				var dropHandler = function(event) {
@@ -77,11 +74,8 @@ angular.module('fileReaderModule', [])
 			scope: {
 				ngModel: '='
 			},
-			// controller: function($scope, $element, $attrs, $transclude) {},
 		 	require: 'ngModel', // Array = multiple requires, ? = optional, ^ = check parent elements
 			restrict: 'AE', // E = Element, A = Attribute, C = Class, M = Comment
-			// templateUrl: '',
-			// compile: function(tElement, tAttrs, function transclude(function(scope, cloneLinkingFn){ return function linking(scope, elm, attrs){}})),
 			link: function(scope, element) {
 				var loadHandler = function(fileObject) {
 					if (angular.isArray(scope.ngModel)) {
