@@ -1,68 +1,64 @@
+<div class="spacer"></div>
+<ng-include src="'/views/products/filters.html'"></ng-include>
+<div class="row line"></div>
+<div class="spacer"></div>
 
 <div class="row">
-  <div class="col-md-12">
-    <h1>Products</h1>
-  </div>
-</div>
+    <div class="col-md-6" 
+         ng-repeat="product in entityController.entityManager.entities | filter: entityController.entityManager.filterFn">
+        <div class="panel panel-success">
+            <div class="panel-heading">{{product.name}}</div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        <img ng-if="product.photos.length" 
+                             ng-src="{{product.photos[0].content}}" alt="product image"
+                             class="img-thumbnail product-list-image">
 
-<div class="row">
-  <form class="form-horizontal well" role="form">
-    <div class="form-group">
-      <label for="" class="col-md-2 control-label">Product name</label>
-      <div class="col-md-2">
-        <input type="text" class="form-control" ng-model="list.filters.name" id="" placeholder="">
-      </div>
-      <label for="" class="col-md-2 control-label">Seller</label>
-      <div class="col-md-2">
-        <select name="" id="" class="form-control" ng-model="list.filters.seller" ng-options="seller as seller for seller in list.sellersSet">
-          <option value=""></option>
-        </select>
-      </div>
-      <label for="" class="col-md-2 control-label">Categories</label>
-      <div class="col-md-2">
-        <select name="" id="" class="form-control" ng-model="list.filters.category" ng-options="location as location for location in list.categoriesSet">
-          <option value=""></option>
-        </select>
-      </div>
-    </div>
-  </form>
-</div>
+                        <img ng-if="!product.photos.length" 
+                             ng-src="/images/product-default.png"
+                             alt="default product"
+                             class="img-thumbnail product-list-image">
+                    </div>
 
-
-<div class="row">
-
-     <div class="col-md-6"ng-repeat="product in filteredProducts = (list.products | filter: list.productsFilterFn) ">
-      <div class="panel panel-primary">
-        <div class="panel-heading">{{ product.name }}</div>
-        <div class="panel-body">
-         <div class="col-md-6">
-            <img  ng-show="product.photos.length" src="{{ product.photos[0].content}}" class="img-thumbnail" alt="">
-         </div>
-         <div class="col-md-6">
-            <div class="row">
-              <div class="col-md-12">
-                <p class="text-primary"><strong> {{ product.seller.username }} </strong></p>                
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-md-12">
-                <p > {{ product.description }} </p>                
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-md-12">
-                <div ng-repeat="category in product.categories"><span class="label label-success"> {{ category.description }}</span></div>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-md-12">
-                <div class="pull-right">
-                  <a class="btn btn-primary btn-sm" href="#/products/edit/{{ product._id }}" >Edit</a>
-                </div>
-              </div>
-            </div>
-         </div>
-        </div>
-      </div>
-  </div>
-</div>
+                    <div class="col-md-8">
+                        <div class="row">
+                            <small class="text-muted">seller</small>
+                            <div class="col-md-12">
+                                {{product.seller.username}}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <small class="text-muted">description</small>
+                            <div class="col-md-12">
+                                {{product.description}}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <small class="text-muted">categories</small>
+                            <div class="col-md-12">
+                                <span class="label label-success category-listed" 
+                                      ng-repeat="category in product.categories">{{category.title}}</span>
+                            </div>
+                        </div>
+                    </div> <!-- col-md-6 -->
+                </div> <!-- row -->    
+                  
+                  <div class="row">
+                      <div class="col-md-12">
+                        <div class="pull-right">
+                          <a  class="btn btn-primary btn-sm" 
+                              ng-click="entityController.entityManager.edit(product)">
+                              Edit
+                          </a>
+                          <a  class="btn btn-danger btn-sm" 
+                              ng-click="entityController.entityManager.remove(product)">
+                              Remove
+                          </a>
+                        </div>
+                      </div> <!-- col-md-12 -->
+                  </div> <!-- row -->
+            </div> <!-- panel body -->
+        </div> <!-- panel -->
+    </div> <!-- col-md-6 -->
+</div> <!-- row -->

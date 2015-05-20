@@ -1,87 +1,39 @@
 (function(){
 
-	'use strict'
+	'use strict';
 
-	var productsListController = function(productsList, auxFunctions) {
-		var list = this;
-
-		//filters
+	var ProductViewController = 
+		function ($templateCache, productsService, entityManagerView, 
+			categoryCreateOrUpdateMixin, photoMixin) {
 		
-		list.filters = {
-			username: null,
-			category: null,
-			seller: null
-		}
-
-		//Filter function
-		list.productsFilterFn = function(product) {
-		    if(list.filters.name && product.name && (product.name.toLowerCase().indexOf(list.filters.name.toLowerCase()) == -1) ) {
-		        return false;
+		var productController = this,
+			mixins = angular.extend({}, categoryCreateOrUpdateMixin, photoMixin),
+			opts = {
+		        entityService: productsService,
+		        createTemplate: $templateCache.get('product_create'),
+		        listName: 'Products',
+		        createOrUpdateMixin: mixins,
+		        scope: productController,
+		        newName: 'Add product',
+		        noResultsText: 'No results found',
+		        confirmText: 'Are you sure?'
 		    };
 
-		    if(list.filters.seller && product.name && (product.seller.username.toLowerCase().indexOf(list.filters.seller.toLowerCase()) == -1) ) {
-		        return false;
-		    };
-
-		    if(list.filters.category && product.categories) {
-		    	var found;
-		    	for (var i = 0; i < product.categories.length; i++) {
-		    		if(product.categories[i].description == list.filters.category) {
-		    			found = true;
-		    		}
-		    	};
-
-		    	if(!found) {
-		    		return false;
-		    	}
-		    } 
-
-		    return true;
+		productController.filters = {
+			name: '',
+			description: ''
 		};
 
-		//Initialization Control
-		function init() {
-			list.products = productsList;
-			list.locationsSet = auxFunctions.generateSet(list.products, "location");
-			list.categoriesSet = auxFunctions.generateSet(list.products, "description", "categories");
-			list.sellersSet = auxFunctions.generateSet(list.products, "username", "seller");
-		};
-
-		init();
+		entityManagerView.createFor(opts)
+			.then(function(entityManager) {
+				productController.entityManager = entityManager;
+				// productController.entityManager.filterFn = filterCategories;
+			});
 	};
 
-
-	var productEditionController = function(product, categories, productsService, categoriesService, auxFunctions) {
-
-		var editor = this;
-
-		editor.product = product
-
-		editor.update = function(product) {
-			productsService.update(product)
-		}
-
-		editor.addPhoto = function(photos, photo){
-			auxFunctions.addElement(photos, photo)
-		}
-
-		editor.addCategory = function(newCategory) {
-			auxFunctions.addElement(editor.product.categories, newCategory, "description", { notAllowRepeated: true });
-		};
-
-		editor.removeCategory = function(category){
-			auxFunctions.removeElement(editor.product.categories, category);
-		};
-
-		 function init () {
-			editor.categories = categories;
-		};
-
-		init();
-	}
-
-	angular.module('stores')
-		.controller('productsListController', productsListController)
-		.controller('productEditionController', productEditionController)
-
-})();
+	angular.module('products')
+		.run(function (loadTemplate) {
+			loadTemplate('views/products/create.html', 'product_create');
+		})
+		.controller('ProductViewController', ProductViewController);
+}());

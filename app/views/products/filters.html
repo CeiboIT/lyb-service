@@ -1,0 +1,25 @@
+<div class="row">
+  <div class="form-horizontal">
+    <div class="">
+      <div class="col-md-2">
+        <span class="text-huge">Products</span>
+      </div>
+      <label class="col-md-2 control-label text-normal">Name</label>
+      <div class="col-md-2">
+        <input type="text" class="form-control input-sm" 
+               ng-model="entityController.filters.title">
+      </div>
+      <label class="col-md-2 control-label text-normal">Seller</label>
+      <div class="col-md-2">
+        <input type="text" class="form-control input-sm" 
+               ng-model="entityController.filters.description">
+      </div>
+      <div class="col-md-2">
+        <button ng-click="entityController.entityManager.create()"
+                class="btn btn-success input-sm pull-right"> 
+                <i class="fa fa-plus"></i>
+                  {{entityController.entityManager.newName}}
+        </button>
+    </div>
+  </div>  
+</div>
