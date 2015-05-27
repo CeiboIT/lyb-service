@@ -1,6 +1,6 @@
 <!-- StoreViewController as entityController -->
 <div class="spacer"></div>
-<ng-include src="'/views/stores/filters.html'"></ng-include>
+<ng-include src="'/scripts/modules/stores/filters.html'"></ng-include>
 <div class="row line"></div>
 <div class="spacer"></div>
 
@@ -51,6 +51,7 @@
                     ng-click="entityController.entityManager.remove(store)">
                     Remove
                 </a>
+                <a href="" ng-click="entityController.goToStore(store)">enter</a>
               </div>
             </div> <!-- col-md-12 -->
           </div> <!-- row -->
