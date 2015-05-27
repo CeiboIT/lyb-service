@@ -1,5 +1,5 @@
 var AbstractUsersTypes =  require('../schemas/usersSchema');
-var logger = console;
+var logger = require('../configs/log');
 var Users = AbstractUsersTypes.User;
 var Seller = AbstractUsersTypes.Seller;
 var Buyer = AbstractUsersTypes.Buyer;
@@ -8,19 +8,21 @@ var usersService = {
 	Sellers : {},
 	Buyers : {},
 	findAll : function(callback) {
-		Users.find({},function(err, response){
-				if(err) return err;
+		Users.find({}, function(err, response){
+				if(err) {
+					logger.error('usersService > findAll ', err);
+					return err;
+				}
 				//res.redirect('/login');
 				callback(response);
 			});
 	},
 	getUserByName : function(findUserName, callback) {
 		var user = new Users({username : findUserName});
-		user.findByName(function(response){
-			callback(response);
+		user.findByName(function(err, response){
+			callback(err, response);
 		});
 	},
-
 	update: function(usertoUpdate, callback, userType){
 		var user = new Users(usertoUpdate);
 		user.update(function(response){
@@ -31,13 +33,13 @@ var usersService = {
 
 //SELLERS
 usersService.Sellers = {
-
 	create: function (sellerData, callback) {
 		var seller = new Seller(sellerData);
-		seller.createUser(sellerData, function(response){
-			//res.redirect('/login');
-			callback(response);
-		}, 'Seller');
+		seller.createUser(sellerData, 'Seller', callback);
+		// , function(response){
+		// 	logger.log('debug', 'create Seller ' + sellerData);
+		// 	callback(response);
+		// });
 	},
 	findAll: function (callback) {
 		Seller.find({},
@@ -53,7 +55,6 @@ usersService.Sellers = {
 
 //BUYERS
 usersService.Buyers = {
-
 	create: function(buyerData, callback) {
 		var buyer = new Buyer(buyerData);
 			buyer.createUser(buyerData, function(response) {
