@@ -5,8 +5,14 @@ var usersService = require('../services/usersService');
 var sellersService = usersService.Sellers;
 var buyersService = usersService.Buyers;
 
+router.get('/', function (req, res) {
+	usersService.findAll(function (users) {
+		res.send(users);
+	});
+});
+
 /**Sellers CRUD ***/
-router.post('/create/seller', function(req, res){
+router.post('/sellers', function(req, res){
 	sellersService.create(req.body, function(response){
 		res.send(response); 
 	});
