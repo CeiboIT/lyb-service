@@ -11,11 +11,11 @@
             <div class="panel-body">
                 <div class="row">
                     <div class="col-md-4">
-                        <img ng-if="product.photos.length" 
-                             ng-src="{{product.photos[0].content}}" alt="product image"
+                        <img ng-if="product.images.length" 
+                             ng-src="{{product.images[0].content}}" alt="product image"
                              class="img-thumbnail product-list-image">
 
-                        <img ng-if="!product.photos.length" 
+                        <img ng-if="!product.images.length" 
                              ng-src="/images/product-default.png"
                              alt="default product"
                              class="img-thumbnail product-list-image">

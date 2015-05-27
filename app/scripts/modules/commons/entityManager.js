@@ -60,8 +60,8 @@ EntityViews.controller('CreateOrUpdateController',
             controller.action(controller.entity)
                 .then(function (response) {
                     $modalInstance.close(response);
-                }, function (error) {
-                    $log.error('CreateOrUpdateDialogController > ' + error);
+                }, function () {
+                    $log.error('CreateOrUpdateDialogController');
                     controller.entityErrors = [{text: 'Mmmmm, something went wrong, please try again.' }];
                 });
         };

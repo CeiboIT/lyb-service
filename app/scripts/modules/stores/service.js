@@ -21,7 +21,8 @@
 		service.newEntity = function () {
 			return {
 				categories: [],
-				photo: defaultImage
+				photo: defaultImage,
+				owner: {}
 			};
 		};
 		// formatter are apllyed before/after specific crud operation

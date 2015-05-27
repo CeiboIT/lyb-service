@@ -28,13 +28,16 @@ angular
     'restServices',
     'restangular',
     'entityViews',
+    'landing',
     'ui.bootstrap',
     'ui.select', 
     'ngSanitize'
   	])
   .constant('apiBaseUrl', 'http://' + window.location.host)
-  .config(['$stateProvider','$urlRouterProvider', '$httpProvider',
-    function ($stateProvider, $urlRouterProvider, $httpProvider) {
+  .config(['$stateProvider','$urlRouterProvider', '$httpProvider', 'restConfigProvider',
+    function ($stateProvider, $urlRouterProvider, $httpProvider, restConfigProvider) {
+
+    restConfigProvider.setBaseUrl('/');
 
     $httpProvider.interceptors.push('responseErrorInterceptor');
 
@@ -44,21 +47,29 @@ angular
 
       /*** STORES ***/
 
+      .state('layout', {
+        abstract: true,
+        templateUrl: 'scripts/modules/landing/layout.html',
+        controller: 'LandingController',
+        controllerAs: 'landing'
+      })
       .state('stores', {
+        parent: 'layout',
         url: '/stores',
         abstract : true,
         template: '<ui-view/>'
       })
 
-    	.state('stores.list', {
-    	  url: '/list',
-    	  templateUrl: 'views/stores/list.html',
-    	  controller: 'StoreViewController as entityController'
-    	})
+    	// .state('stores.list', {
+    	//   url: '/list',
+    	//   templateUrl: 'views/stores/list.html',
+    	//   controller: 'StoreViewController as entityController'
+    	// })
       
       /*** CATEGORIES ***/
 
       .state('categories', {
+        parent: 'layout',
         url: '/categories',
         abstract : true,
         template: '<ui-view/>'
@@ -73,6 +84,7 @@ angular
       /***PRODUCTS ***/
 
       .state('products', {
+        parent: 'layout',
         url: '/products',
         abstract : true,
         template: '<ui-view/>'
@@ -87,6 +99,7 @@ angular
       /*** USERS ***/
 
       .state('users', {
+        parent: 'layout',
         url: '/users',
         abstract : true,
         template: '<ui-view/>'
@@ -101,6 +114,7 @@ angular
       /*** ***/ 
 
       .state('stats', {
+        parent: 'layout',
         url: '/stats',
         abstract : true,
         template: '<ui-view/>'
@@ -116,6 +130,12 @@ angular
           }
         }
       });
+    }])
+    .run(['$window', function ($window) {
+        var adminUser = {
+          role: 'admin',
+        };
+        $window.sessionStorage.setItem('user', JSON.stringify(adminUser));
     }])
     .factory('responseErrorInterceptor', function ($q, $log) {
         return {

@@ -32,7 +32,7 @@ angular.module('fileReaderModule', [])
 			},
 			 require: 'ngModel', // Array = multiple requires, ? = optional, ^ = check parent elements
 			 restrict: 'AE', // E = Element, A = Attribute, C = Class, M = Comment
-			 template: '<div class="dropbox" ng-show="!ngModel"></div><img class="dropbox" src="{{ ngModel.content || ngModel[photoKey].content }}" ng-show="ngModel"></img>',
+			 template: '<div class="dropbox" ng-show="!ngModel"></div><img class="dropbox" ng-src="{{ ngModel.content || ngModel[photoKey].content }}" ng-show="ngModel"></img>',
 			 transclude: true,
 			link: function(scope, element, iAttrs) {
 				scope.photoKey = iAttrs.photoKey;

@@ -44,18 +44,18 @@
       "Wallis and Futuna", "Western Sahara", "Yemen", "Zambia", "Zimbabwe"
     ];
 
-	var photoMixin = function () {
+	var imageMixin = function () {
 		return {
-			removePhoto: function (photos, photo) {
-				var index = photos.indexOf(photo);
+			removeImage: function (images, image) {
+				var index = images.indexOf(image);
 				if (index >= 0) {
-					photos.splice(index, 1);
+					images.splice(index, 1);
 				}
 			}
 		};
 	};
 
-	var productsService = function (entityService, collectCategoryId) {
+	var productsService = function (entityService, collectCategoryId, authService) {
 		var formatters = {
 			preSave: collectCategoryId,
 			preUpdate: collectCategoryId },
@@ -63,8 +63,9 @@
 		
 		service.newEntity = function () {
 			return {
+                        store: authService.getUser().store
 				categories: [],
-				photos: []				
+				images: []				
 			};
 		};
 		return service; 
@@ -72,6 +73,6 @@
 	
 	angular.module('stores')
 		.value('countryList', countryList)
-		.factory('photoMixin', photoMixin)
+		.factory('imageMixin', imageMixin)
 		.service('productsService', productsService);
 }());

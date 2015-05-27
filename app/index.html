@@ -27,60 +27,8 @@
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
 
-    <!-- Add your site or application content here -->
-    <nav class="navbar navbar-default" role="navigation">
-      <div class="container-fluid">
-        <!-- Brand and toggle get grouped for better mobile display -->
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" href="#">LYB CMS</a>
-        </div>
-
-        <!-- Collect the nav links, forms, and other content for toggling -->
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-          <ul class="nav navbar-nav">
-            <li>
-              <a ui-sref="products.list">Products</a>
-            </li>
-            <li>
-              <a ui-sref="categories.list">Categories</a>
-            </li>
-            <li>
-              <a ui-sref="users.list">Users</a>
-            </li>
-            <li>
-              <a ui-sref="stores.list">Stores</a>
-            </li>
-            <li>
-              <a ui-sref="stats.general">Stats</a>
-            </li>
-          </ul>
-          <ul class="nav navbar-nav navbar-right">
-            <li class="dropdown">
-              <a class="dropdown-toggle" data-toggle="dropdown">Admin <span class="caret"></span></a>
-              <ul class="dropdown-menu" role="menu">
-                <li><a href="#">Profile</a></li>
-              </ul>
-            </li>
-          </ul>
-        </div><!-- /.navbar-collapse -->
-      </div><!-- /.container-fluid -->
-    </nav>
-
-      <div class="container" ui-view=""></div>
-
-      <div class="footer">
-        <div class="container text-right">
-          LYB CSM by Emiliano Potignano
-        </div>
-      </div>
-    </div>
-
+    <div ui-view></div>
+    
 
     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
      <script>
@@ -119,6 +67,7 @@
     <script src="bower_components/lodash/lodash.min.js"></script>
     <script src="bower_components/angular-sanitize/angular-sanitize.min.js"></script>
     <script src="bower_components/angular-ui-select/dist/select.min.js"></script>
+
     <script src="lib/ui-bootstrap-custom-tpls-0.13.0.min.js"></script>
 
     <!-- endbower -->
@@ -129,9 +78,12 @@
         
         <script src="scripts/modules/commons/entityManager.js"></script>
         <script src="scripts/modules/commons/services.js"></script>
+        
         <script src="ceibo_components/ceibo.ui.js"></script>
         <script src="ceibo_components/d3directives.js"></script>
         <script src="ceibo_components/fileReader.js"></script>
+
+        <script src="scripts/modules/landing/landing.js"></script>
         
         <script src="scripts/modules/stores/module.js"></script>
         <script src="scripts/modules/stores/service.js"></script>

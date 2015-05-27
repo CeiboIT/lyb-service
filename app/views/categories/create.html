@@ -34,10 +34,6 @@
         </div>
     </div> <!-- modal body -->
     <div class="modal-footer">
-        <a class="btn btn-danger"
-           ng-class="{ hidden: createController.entityErrors.length == 0 }"
-           ng-click="createController.cancel()"> Close </a>
-        
         <!-- https://docs.angularjs.org/api/ng/directive/form#submitting-a-form-and-preventing-the-default-action -->
         <a class="btn btn-default"
            ng-click="createController.cancel()"
