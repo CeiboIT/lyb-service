@@ -9,7 +9,7 @@ var productSchema = new Schema({
 	sells : Number,
 	seller : { type: Schema.Types.ObjectId, ref: 'Seller' },
 	store : { type: Schema.Types.ObjectId, ref: 'Store' },
-	photos : [],
+	images : [],
 
 });
 

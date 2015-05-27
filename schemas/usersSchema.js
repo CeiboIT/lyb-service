@@ -3,6 +3,7 @@ var Schema = require('mongoose').Schema;
 var bcrypt = require('bcrypt-nodejs');
 var util = require('util');
 var fashionTypes = require('../configs/referenceValues').fashionTypes;
+var logger = require('../configs/log');
 
 // Abstract User Schema
 
@@ -35,22 +36,32 @@ userSchema.methods.validPassword = function(password) {
     return bcrypt.compareSync(password, this.password);
 };
 
-userSchema.methods.createUser = function(userToCreate, callback, userType) {
-	if (userType) {
-		var user = new usersType[userType](userToCreate);
-		user.password = user.generateHash(user.password);
+userSchema.methods.newUser = function (userType, userToCreate) {
+	var user = new usersType[userType](userToCreate);
+	user.password = user.generateHash(user.password);
+	return user;
+};
 
-		user.save(function(err){
-			if(err) {
-				return err;
-			}
-			callback(200);
-		});
+userSchema.methods.createUser = function(userToCreate, userType, callback) {
+	if (!userType) {
+		logger.log('error', 'Invalid user type ' + userType);
+		return 500;
 	}
+	var user = new usersType[userType](userToCreate);
+	user.password = user.generateHash(user.password);
+
+	var savedUser = user.save();
+	user.save(function (err, savedUser) {
+		if (err) {
+			logger.log('error', err);
+			return null;
+		}
+		callback(err, savedUser);
+	});
 };
 
 userSchema.methods.findByNameOrEmail = function(identification, callback, userType) {
-	var User = this.model('User');
+	var User = this.model('Seller');
 	var query;
 	var options = {
 		$or: [
@@ -74,7 +85,7 @@ userSchema.methods.findByNameOrEmail = function(identification, callback, userTy
 };
 
 userSchema.methods.findByName = function(callback, userType) {
-	var User = this.model('User');
+	var User = mongoose.model('User');
 	var query;
 	var options = { 'username': this.username };
 	if (userType) {
@@ -85,9 +96,11 @@ userSchema.methods.findByName = function(callback, userType) {
 
 	query.exec(function(err, user){
 		if(err) {
+			logger.log('error', 'error finding a user by username:' + this.username);
+			logger.log('error', err);
 			return err;
 		}
-		callback(user);
+		callback(err, user);
 	});
 };
 
@@ -138,7 +151,7 @@ var User =  mongoose.model('User', userSchema);
 
 //Definition of Seller
 var sellerSchema = new AbstractUserSchema({
-	store: { type: Schema.Types.ObjectId, ref: 'Store' },
+	// store: { type: Schema.Types.ObjectId, ref: 'Store' },
 	website: String
 });
 
@@ -164,10 +177,10 @@ var buyerSchema = new AbstractUserSchema({
 var adminSchema = new AbstractUserSchema();
 
 var usersType = {
-	User : User,
-	Seller : User.discriminator('Seller', sellerSchema),
-	Buyer : User.discriminator('Buyer', buyerSchema),
-	Admin : User.discriminator('Admin', adminSchema)
+	User: User,
+	Seller: User.discriminator('Seller', sellerSchema),
+	Buyer: User.discriminator('Buyer', buyerSchema),
+	Admin: User.discriminator('Admin', adminSchema)
 };
 
 //Export it
