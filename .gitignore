@@ -1,4 +1,7 @@
+configs/debug.log
+configs/exceptions.log
 .directory
 node_modules
 bower_components
 .tmp/
+npm-debug.log
