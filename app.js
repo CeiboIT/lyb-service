@@ -1,7 +1,7 @@
 var express = require('express');
 var path = require('path');
 var favicon = require('static-favicon');
-var logger = require('morgan');
+var morgan = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var cors = require('cors');
@@ -31,7 +31,7 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
 app.use(favicon());
-app.use(logger('dev'));
+app.use(morgan('dev'));
 app.use(cors());
 app.use(session({ secret: 'luxury', saveUninitialized: true, resave: true }));
 app.use(bodyParser.json(configs.general.bodyLimit));
