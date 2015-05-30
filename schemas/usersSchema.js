@@ -50,7 +50,6 @@ userSchema.methods.createUser = function(userToCreate, userType, callback) {
 	var user = new usersType[userType](userToCreate);
 	user.password = user.generateHash(user.password);
 
-	var savedUser = user.save();
 	user.save(function (err, savedUser) {
 		if (err) {
 			logger.log('error', err);
@@ -94,14 +93,15 @@ userSchema.methods.findByName = function(callback, userType) {
 		query = User.findOne(options);
 	}
 
-	query.exec(function(err, user){
-		if(err) {
-			logger.log('error', 'error finding a user by username:' + this.username);
-			logger.log('error', err);
-			return err;
-		}
-		callback(err, user);
-	});
+	return query.exec();
+	// function(err, user){
+	// 	if(err) {
+	// 		logger.log('error', 'error finding a user by username:' + this.username);
+	// 		logger.log('error', err);
+	// 		return err;
+	// 	}
+	// 	callback(err, user);
+	// });
 };
 
 userSchema.methods.update = function(callback, userType) {
