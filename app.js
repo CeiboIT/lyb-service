@@ -5,8 +5,8 @@ var morgan = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var cors = require('cors');
-var session = require('express-session');
-var passportConf = require('./configs/passport');
+// var session = require('express-session');
+// var passportConf = require('./configs/passport');
 //Routes managers
 var routes = require('./routes/index');
 
@@ -35,12 +35,12 @@ app.set('view engine', 'ejs');
 app.use(favicon());
 app.use(morgan('dev'));
 app.use(cors());
-app.use(session({ secret: 'luxury', saveUninitialized: true, resave: true }));
+// app.use(session({ secret: 'luxury', saveUninitialized: true, resave: true }));
 app.use(bodyParser.json(configs.general.bodyLimit));
 app.use(bodyParser.urlencoded());
 app.use(cookieParser());
-app.use(passportConf.initialize);
-app.use(passportConf.session);
+// app.use(passportConf.initialize);
+// app.use(passportConf.session);
 // app.use(express.static(path.join(__dirname, 'app')));
 app.use(express.static(path.join(process.env.PWD, 'app')));
 
