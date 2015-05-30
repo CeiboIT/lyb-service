@@ -61,9 +61,18 @@
 			preUpdate: collectCategoryId },
 			service = entityService.getCrudFor('products', formatters);
 		
+            service.getAll = function () {
+                  var storeId = authService.getStoreId();
+                  if (storeId) {
+                        return service.rest.one('store').one(storeId).getList();
+                  } else { // admin
+                        return service.rest.getList();
+                  }
+            };
+
 		service.newEntity = function () {
 			return {
-                        store: authService.getUser().store
+                        store: authService.getUser().store,
 				categories: [],
 				images: []				
 			};
