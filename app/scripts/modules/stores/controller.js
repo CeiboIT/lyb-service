@@ -36,20 +36,6 @@
 	    	  controller: 'StoreViewController as entityController'
 	    	});
 		}])
-		.factory('authService', ['$window', '$state', function ($window, $state) {
-			var auth = {
-				loginAsSeller: function (store) { // Mock function to demo. Need to be removed
-					var seller = {
-						role: 'seller',
-						username: 'john_doe_seller',
-						store: store
-					};
-					$window.sessionStorage.setItem('user', JSON.stringify(seller));
-					$state.go('products.list',{},{reload: true});
-				}
-			};
-			return auth;
-		}])
 		.run(function(loadTemplate) {
 			loadTemplate('/scripts/modules/stores/create.html', 'store_create');
 		})
