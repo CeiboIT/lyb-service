@@ -1,11 +1,16 @@
 var router = require('express').Router();
 var productsService = require('../services/productsService');
+var logger = require('../configs/log.js');
 
 
-router.post('/', function(req, res){
-	productsService.create(req.body, function(response){
-		res.send(response);
-	});
+router.post('/', function(req, res) {
+	productsService.create(req.body)
+		.then(function(product) {
+			res.send(product);
+		}, function(err) {
+			logger.log('error', err);
+			res.send(500);
+		});
 });
 
 router.delete('/:id', function(req, res){
@@ -15,17 +20,39 @@ router.delete('/:id', function(req, res){
 	});
 });
 
+router.get('/store/:storeId', function(req, res){
+	var storeId = req.params.storeId;
+	productsService.findAll(storeId)
+		.then(function(products) {
+			res.send(products);
+		}, function(err) {
+			logger.log('err', err);
+			res.send(500);
+		});
+});
+
 router.get('/', function(req, res){
-	productsService.findAll(function(response){
-		res.send(response);
-	});
+	productsService.findAll()
+		.then(function(products) {
+			res.send(products);
+		}, function(err) {
+			logger.log('err', err);
+			res.send(500);
+		});
 });
 
 router.get('/:id', function(req, res){
 	var productId = req.params.id;
-	productsService.getProductById(productId, function(response){
-		res.send(response);
-	});
+	productsService.getProductById(productId)
+		.then(function(product) {
+			res.send(product);
+		}, function(err) {
+			logger.log('err', err);
+			res.send(500);
+		});
+	// productsService.getProductById(productId, function(response){
+	// 	res.send(response);
+	// });
 });
 
 router.put('/:id', function(req, res){
