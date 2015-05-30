@@ -1,32 +1,46 @@
 var Store = require('../schemas/storeSchema');
 var usersService = require('../services/usersService');
+var mongoose = require('mongoose');
 var populationOptions = require('../configs/general').populationOptions;
 var logger = require('../configs/log');
 var storeService = {};
 
 storeService.create = function(storeData, callback) {
 	var store = new Store(storeData);
-	
-	usersService.getUserByName(storeData.owner.username, function (err, response) {
-		if (response) {
-			logger.log('error', 'User already exist. One user can be owner of store');
-			return (500);
-		}
+	var createStore = function () {
 		usersService.Sellers.create(storeData.owner, function(err, newSeller) {
-			usersService.getUserByName(newSeller.username, function (err, response){
-				// store.owner = 
-				store.save(function (err, newStore) {
-					if(err) {
-						logger.log('error', 'storeService > create ' + err);
-						return err;
-					}
-					logger.log('debug', 'Store created ' + newStore);
-					callback(200);
-				});	
-				
+			if(err) {
+				logger.log('error', 'storeService > create ' + err);
+				callback(500);
+				return err;
+			}
+			store.owner = newSeller.id;
+			store.save(function (err, newStore) {
+				if(err) {
+					logger.log('error', 'storeService > create ' + err);
+					callback(500);
+					return err;
+				}
+				logger.log('debug', 'Store created ' + newStore);
+				callback(newStore);
+			});	
+	    });
+	};
+	usersService.getUserByName(storeData.owner.username)
+		.then(function(response) {
+				if (!response) {
+					createStore();
+				} else {
+					logger.log('error', 'User already exist. One user can be owner of store');
+					callback(500);
+				}
+			},
+			function (err) {
+				if (err) {
+					logger.log('error', err);
+					callback(500);
+				}
 			});
-		});
-	});
 };
 
 storeService.findAll = function(callback) {
@@ -42,15 +56,10 @@ storeService.findAll = function(callback) {
 };
 
 storeService.getStoreById = function(storeId, callback) {
-
 	var query = Store.findOne({'_id' : storeId});
 	query.populate(populationOptions.owner);
 	query.populate(populationOptions.categories);
-	query.exec(function(err, response){
-		if(err) return err;
-		callback(response);
-	});
-
+	return query.exec();
 };
 
 storeService.delete = function(storeId, callback) {

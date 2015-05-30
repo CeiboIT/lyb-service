@@ -3,16 +3,12 @@ var populationOptions = require('../configs/general').populationOptions;
 var logger = console;
 var productService = {};
 
-productService.create = function(productData, callback) {
+productService.create = function(productData) {
 	var product = new Product(productData);
 	logger.log('productService.create > ', productData);
-	product.save(function(err, response) {
-		if (err) {
-			logger.error('productService.create > ' + err);
-			return err;
-		}
-		callback(response);
-	});
+
+	product.store = productData.store._id;
+	return product.save();
 };
 
 productService.delete = function(productId, callback) {
@@ -40,18 +36,32 @@ productService.findProductByName = function(searchForName, callback) {
 	});
 };
 
-productService.findAll = function(callback) {
-
-	Product.find()
-	.populate(populationOptions.seller)
-	.populate(populationOptions.categories)
-	.populate(populationOptions.store)
-	.exec(function(err, response){
-		if(err) {
-			return err;
-		}
-		callback(response);
-	});
+productService.findAll = function(storeId) {
+	if (storeId) {
+		return Product.find({store: storeId})
+			.populate(populationOptions.categories)
+			.populate(populationOptions.store)
+			.populate(populationOptions.seller)
+			.exec();
+			//;function (err, products) {
+			//	callback(err, products);
+				// if (err) {
+					// return err;
+				// }
+			//});
+	} else {
+		return Product.find()
+		.populate(populationOptions.seller)
+		.populate(populationOptions.categories)
+		.populate(populationOptions.store)
+		.exec();
+		// .exec(function(err, response){
+		// 	if(err) {
+		// 		return err;
+		// 	}
+		// 	callback(response, err);
+		// });
+	}
 };
 
 productService.getProductById = function(productId, callback) {

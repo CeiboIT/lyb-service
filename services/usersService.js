@@ -18,10 +18,12 @@ var usersService = {
 			});
 	},
 	getUserByName : function(findUserName, callback) {
-		var user = new Users({username : findUserName});
-		user.findByName(function(err, response){
-			callback(err, response);
-		});
+		var user = new Users(),
+			query = Users.findOne({username : findUserName});
+		return query.exec();
+		// function(err, response){
+		// 	callback(err, response);
+		// });
 	},
 	update: function(usertoUpdate, callback, userType){
 		var user = new Users(usertoUpdate);
@@ -35,11 +37,10 @@ var usersService = {
 usersService.Sellers = {
 	create: function (sellerData, callback) {
 		var seller = new Seller(sellerData);
-		seller.createUser(sellerData, 'Seller', callback);
-		// , function(response){
-		// 	logger.log('debug', 'create Seller ' + sellerData);
-		// 	callback(response);
-		// });
+		seller.createUser(sellerData, 'Seller', function(err, response){
+			logger.log('debug', 'create Seller ' + sellerData);
+			callback(err, response);
+		});
 	},
 	findAll: function (callback) {
 		Seller.find({},
