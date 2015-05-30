@@ -1,6 +1,5 @@
 var mongoose = require('mongoose');
 var Schema = require('mongoose').Schema;
-var soft_delete = require('mongoose-softdelete');
 
 var storeSchema = new Schema({
 	name : String,
@@ -13,7 +12,5 @@ var storeSchema = new Schema({
 	photo : {},
 	owner : { type: Schema.Types.ObjectId, ref: 'Seller' }
 });
-
-storeSchema.plugin(soft_delete);
 
 module.exports = mongoose.model('Store', storeSchema);
