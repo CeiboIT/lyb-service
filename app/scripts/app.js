@@ -16,6 +16,7 @@ angular
   	'ui.router',
     'ceibo.ui',
     'ceibo.d3',
+    'ceibo.auth',
     // 'mgcrea.ngStrap',
     'smart-table',
     'fileReaderModule',
@@ -131,11 +132,8 @@ angular
         }
       });
     }])
-    .run(['$window', function ($window) {
-        var adminUser = {
-          role: 'admin',
-        };
-        $window.sessionStorage.setItem('user', JSON.stringify(adminUser));
+    .run(['authService', function (authService) {
+        authService.loginAsAdmin();
     }])
     .factory('responseErrorInterceptor', function ($q, $log) {
         return {
