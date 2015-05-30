@@ -19,6 +19,8 @@ var auth = require('./controllers/authCtrl');
 var stores = require('./controllers/storesCtrl');
 var statistics = require('./controllers/statisticsCtrl');
 /*** * ** *****/
+process.env.PWD = process.cwd();
+
 
 //Express app inited
 var app = express();
@@ -39,8 +41,11 @@ app.use(bodyParser.urlencoded());
 app.use(cookieParser());
 app.use(passportConf.initialize);
 app.use(passportConf.session);
-app.use(express.static(path.join(__dirname, 'app')));
-app.use('/bower_components', express.static(path.join(__dirname, '/bower_components')));
+// app.use(express.static(path.join(__dirname, 'app')));
+app.use(express.static(path.join(process.env.PWD, 'app')));
+
+// app.use('/bower_components', express.static(path.join(__dirname, '/bower_components')));
+app.use('/bower_components', express.static(path.join(process.env.PWD, '/bower_components')));
 //Routes front
 app.use('/', routes);
 
