@@ -3,14 +3,23 @@
 
 	var Landing = angular.module('landing', []);
 
-	Landing.controller('LandingController', ['$window', '$state', function ($window, $state) {
+	Landing.controller('LandingController', 
+		['$state', 'authService', function ($state, authService) {
 		var landing = this;
 
-		var user = JSON.parse($window.sessionStorage.getItem('user'));
+		var user = authService.getUser();
 
+		landing.username = user.username;
+		
 		landing.goTo = function (stateName) {
 			$state.go(stateName);
 		};
+
+		landing.logout = function () {
+			authService.loginAsAdmin();
+			$state.go('stores.list', {}, {reload: true});	
+		};
+
 		if (user.role === 'admin') {
 			landing.menuItems = [
 				{
