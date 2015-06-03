@@ -20,6 +20,9 @@
                 };
                 $window.sessionStorage.setItem('user', JSON.stringify(adminUser));
             },
+            isAdmin: function () {
+                return this.getUser().role === 'admin';
+            },
             getUser: function () {
                 var user = $window.sessionStorage.getItem('user');
                 return JSON.parse(user);
