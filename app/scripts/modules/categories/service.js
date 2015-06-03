@@ -42,7 +42,13 @@
 	};
 
 	var categoryService = function (entityService) {
-		return entityService.getCrudFor('categories');
+		var service = entityService.getCrudFor('categories'); 
+
+		service.getParents = function () {
+			return service.rest.one('parents').getList();
+		};
+
+		return service;
 	};
 
 	angular.module('categories')

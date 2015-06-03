@@ -7,6 +7,20 @@
 <form name="createController.entityForm" novalidate class="css-form form-horizontal" ng-submit="createController.ok()">
     <div class="modal-body">
         <div class="container-fluid" ng-class="{ hidden: createController.entityErrors.length > 0 } ">
+            
+            <div ng-if="!createController.isAdmin" class="form-group required">
+                <label class="control-label col-sm-3">Parent category:</label>
+                <div class="col-sm-8">
+                    <ui-select ng-model="createController.entity.parent"
+                        close-on-select="true"
+                        theme="bootstrap">
+                        <ui-select-match> {{$select.selected.title}} </ui-select-match>
+                        <ui-select-choices repeat="category in createController.parentCategories">
+                            <span ng-bind-html="category.title | highlight: $select.search"></span>
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
+            </div>
             <div class="form-group required">
                 <label class="control-label col-sm-3">Title:</label>
                 <div class="col-sm-8">

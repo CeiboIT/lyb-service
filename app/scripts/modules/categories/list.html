@@ -1,6 +1,6 @@
 <!-- CategoryViewController as entityController -->
 <div class="spacer"></div>
-<ng-include src="'/views/categories/filters.html'"></ng-include>
+<ng-include src="'/scripts/modules/categories/filters.html'"></ng-include>
 <div class="row line"></div>
 <div class="spacer"></div>
 
@@ -9,7 +9,10 @@
     <div class="col-md-6" 
          ng-repeat="entity in entityController.entityManager.entities | filter: entityController.entityManager.filterFn">
       <div class="panel panel-success">
-        <div class="panel-heading">{{ entity.title }}</div>
+        <div class="panel-heading"> 
+            {{ entity.parent.title }} <i ng-if="entity.parent.title" class="fa fa-angle-right"></i> 
+            {{ entity.title }}
+        </div>
         <div class="panel-body">
           <div class="col-md-6">
             {{entity.description}}
