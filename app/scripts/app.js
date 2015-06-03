@@ -78,7 +78,7 @@ angular
 
       .state('categories.list', {
         url: '/list',
-        templateUrl: 'views/categories/list.html',
+        templateUrl: 'scripts/modules/categories/list.html',
         controller: 'CategoryViewController as entityController'
       })
 
