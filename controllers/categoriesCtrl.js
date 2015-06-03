@@ -1,14 +1,25 @@
 var router = require('express').Router();
 var categoryService = require('../services/categoryService');
+var logger = require('../configs/log.js');
 
 router.post('/', function(req, res){
-	categoryService.create(req.body, function(response){
-		res.send(response);
-	});
+	categoryService.create(req.body)
+		.then( function(response){
+			res.send(response);
+		}, function (err) {
+			logger.log('error', err);
+			res.send(500);
+		});
 });
 
 router.get('/', function(req, res){
 	categoryService.findAll(function(response){
+		res.send(response);
+	});
+});
+
+router.get('/parents', function(req, res){
+	categoryService.findAllParents(function(response){
 		res.send(response);
 	});
 });
