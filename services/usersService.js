@@ -3,10 +3,41 @@ var logger = require('../configs/log');
 var Users = AbstractUsersTypes.User;
 var Seller = AbstractUsersTypes.Seller;
 var Buyer = AbstractUsersTypes.Buyer;
+var Admin = AbstractUsersTypes.Admin;
+
+var loadInitialUser = function () {
+	// Add default admin:admin user
+	usersService.getUserByName('admin')
+		.then(function (response) {
+			if (!response) {
+				var admin = new Admin();
+				admin.username = 'admin';
+				admin.password = admin.generateHash('admin');
+				admin.save(function(err) {
+                    if (err) {
+                        throw err;
+                    }
+                    return admin;
+				});
+			}
+		});
+};
 
 var usersService = {
 	Sellers : {},
 	Buyers : {},
+	isUnique: function (username) {
+		return usersService.getUserByName(username)
+			.then(function(response) {
+				return response;
+			},
+			function (err) {
+				if (err) {
+					logger.log('error', err);
+					return err;
+				}
+			});
+	},
 	findAll : function(callback) {
 		Users.find({}, function(err, response){
 				if(err) {
@@ -37,10 +68,16 @@ var usersService = {
 usersService.Sellers = {
 	create: function (sellerData, callback) {
 		var seller = new Seller(sellerData);
-		seller.createUser(sellerData, 'Seller', function(err, response){
-			logger.log('debug', 'create Seller ' + sellerData);
-			callback(err, response);
-		});
+		return seller.createUser(sellerData, 'Seller')
+			.then(function (user) {
+				return user;
+			}, function (error) {
+				logger.log('error', error);
+				throw error;
+			});
+			// , function(err, response){
+			// logger.log('debug', 'create Seller ' + sellerData);
+			// callback(err, response);
 	},
 	findAll: function (callback) {
 		Seller.find({},
@@ -95,5 +132,7 @@ usersService.Buyers = {
 			});
 	}
 };
+
+loadInitialUser();
 
 module.exports = usersService;

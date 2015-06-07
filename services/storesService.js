@@ -1,46 +1,42 @@
 var Store = require('../schemas/storeSchema');
 var usersService = require('../services/usersService');
-var mongoose = require('mongoose');
 var populationOptions = require('../configs/general').populationOptions;
 var logger = require('../configs/log');
 var storeService = {};
 
-storeService.create = function(storeData, callback) {
+var validateStore = function (ownerData) {
+	return usersService.isUnique(ownerData.username);
+};
+
+storeService.create = function(storeData) {
+	var ownerData;
+	if (storeData.owner) {
+		// remove owner information because User need to be created apart 
+		ownerData = storeData.owner; 
+		delete storeData.owner;
+	}
 	var store = new Store(storeData);
-	var createStore = function () {
-		usersService.Sellers.create(storeData.owner, function(err, newSeller) {
-			if(err) {
-				logger.log('error', 'storeService > create ' + err);
-				callback(500);
-				return err;
-			}
-			store.owner = newSeller.id;
-			store.save(function (err, newStore) {
-				if(err) {
-					logger.log('error', 'storeService > create ' + err);
-					callback(500);
-					return err;
-				}
-				logger.log('debug', 'Store created ' + newStore);
-				callback(newStore);
-			});	
-	    });
-	};
-	usersService.getUserByName(storeData.owner.username)
-		.then(function(response) {
-				if (!response) {
-					createStore();
-				} else {
-					logger.log('error', 'User already exist. One user can be owner of store');
-					callback(500);
-				}
-			},
-			function (err) {
-				if (err) {
-					logger.log('error', err);
-					callback(500);
-				}
-			});
+
+	return validateStore(ownerData)
+		.then(function () {
+			return store.save();
+		}, function (error) {
+			logger.log('error', 'Error validating store', error);
+			throw error;
+		})
+		.then(function (storeNew) {
+			return usersService.Sellers.create(ownerData)
+				.then(function (seller) {
+					seller.store = storeNew._id;
+					return seller.save();
+				}, function (error) {
+					logger.log('error', 'Error creating a seller', error);
+					throw error;
+				})
+				.then(function () {
+					return store;
+				});
+		});
 };
 
 storeService.findAll = function(callback) {

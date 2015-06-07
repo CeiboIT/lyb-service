@@ -3,11 +3,11 @@ var populationOptions = require('../configs/general').populationOptions;
 var logger = console;
 var productService = {};
 
-productService.create = function(productData) {
+productService.create = function(productData, user) {
 	var product = new Product(productData);
 	logger.log('productService.create > ', productData);
 
-	product.store = productData.store._id;
+	product.store = user.store._id;
 	return product.save();
 };
 
@@ -36,31 +36,19 @@ productService.findProductByName = function(searchForName, callback) {
 	});
 };
 
-productService.findAll = function(storeId) {
-	if (storeId) {
-		return Product.find({store: storeId})
+productService.findAll = function(user) {
+	if (user.store && user.store._id) {
+		return Product.find({store: user.store._id})
 			.populate(populationOptions.categories)
 			.populate(populationOptions.store)
 			.populate(populationOptions.seller)
 			.exec();
-			//;function (err, products) {
-			//	callback(err, products);
-				// if (err) {
-					// return err;
-				// }
-			//});
 	} else {
 		return Product.find()
 		.populate(populationOptions.seller)
 		.populate(populationOptions.categories)
 		.populate(populationOptions.store)
 		.exec();
-		// .exec(function(err, response){
-		// 	if(err) {
-		// 		return err;
-		// 	}
-		// 	callback(response, err);
-		// });
 	}
 };
 
