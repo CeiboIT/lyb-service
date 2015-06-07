@@ -4,7 +4,8 @@ var logger = require('../configs/log.js');
 
 
 router.post('/', function(req, res) {
-	productsService.create(req.body)
+	var user = req.session.user;
+	productsService.create(req.body, user)
 		.then(function(product) {
 			res.send(product);
 		}, function(err) {
@@ -20,19 +21,9 @@ router.delete('/:id', function(req, res){
 	});
 });
 
-router.get('/store/:storeId', function(req, res){
-	var storeId = req.params.storeId;
-	productsService.findAll(storeId)
-		.then(function(products) {
-			res.send(products);
-		}, function(err) {
-			logger.log('err', err);
-			res.send(500);
-		});
-});
-
 router.get('/', function(req, res){
-	productsService.findAll()
+	var user = req.session.user;
+	productsService.findAll(user)
 		.then(function(products) {
 			res.send(products);
 		}, function(err) {
@@ -58,12 +49,6 @@ router.get('/:id', function(req, res){
 router.put('/:id', function(req, res){
 	var productToUpdate = req.body;
 	productsService.update(productToUpdate, function(response){
-		res.send(response);
-	});
-});
-
-router.post('/find-by-name', function(req, res){
-	productsService.findProductByName(req.body.productName, function(response){
 		res.send(response);
 	});
 });
