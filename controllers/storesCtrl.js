@@ -1,13 +1,28 @@
 var router = require('express').Router();
 var storesService = require('../services/storesService');
+var logger = require('../configs/log.js');
+
+function isLoggedIn(req, res, next) {
+
+    // if user is authenticated in the session, carry on 
+    if (req.isAuthenticated())
+        return next();
+
+    // if they aren't redirect them to the home page
+    res.send(401);
+}
 
 router.post('/', function(req, res){
-	storesService.create(req.body, function(response){
-		res.send(response);
-	});
+	storesService.create(req.body)
+		.then(function (response) {
+			res.send(response);
+		}, function (error) {
+			logger.log('error', 'Error creating a store', error);
+			res.send(500);
+		});
 });
 
-router.get('/', function(req, res){
+router.get('/', isLoggedIn, function(req, res){
 	storesService.findAll(function(response){
 		res.send(response);
 	});
