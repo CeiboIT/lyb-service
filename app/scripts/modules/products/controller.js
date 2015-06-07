@@ -3,7 +3,7 @@
 	'use strict';
 
 	var ProductViewController = 
-		function ($templateCache, productsService, entityManagerView, 
+		function ($templateCache, authService, productsService, entityManagerView, 
 			categoryCreateOrUpdateMixin, imageMixin) {
 		
 		var productController = this,
@@ -15,16 +15,22 @@
 			        scope: productController,
 			        newName: 'Add product',
 			        noResultsText: 'No results found',
-			        confirmText: 'Are you sure?'
+			        confirmText: 'Are you sure?',
 			    };
-
+			    
 		productController.filters = {
 			name: '',
 			description: ''
 		};
 
+		if (authService.isAdmin()) {
+			productController.perms = { add: false };
+		} else {
+			productController.perms = { add: true };	
+		}
+
 		entityManagerView.createFor(opts)
-			.then(function(entityManager) {
+			.then(function (entityManager) {
 				productController.entityManager = entityManager;
 				// productController.entityManager.filterFn = filterCategories;
 			});

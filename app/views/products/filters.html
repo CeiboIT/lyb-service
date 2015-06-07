@@ -15,7 +15,8 @@
                ng-model="entityController.filters.description">
       </div>
       <div class="col-md-2">
-        <button ng-click="entityController.entityManager.create()"
+        <button ng-if="entityController.perms.add" 
+                ng-click="entityController.entityManager.create()"
                 class="btn btn-success input-sm pull-right"> 
                 <i class="fa fa-plus"></i>
                   {{entityController.entityManager.newName}}
