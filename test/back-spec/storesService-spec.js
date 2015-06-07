@@ -33,7 +33,13 @@
 				done();
 			}
 
-			storesService.create(req, assertStore);
+			storesService.create(req)
+				.then(function (store) {
+					assertStore(store);
+				}, function (error) {
+					console.log(error);
+					done();
+				});
 		});
 	});
 } ());
