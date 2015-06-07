@@ -33,7 +33,12 @@ userSchema.methods.generateHash = function(password) {
 
 // checking if password is valid
 userSchema.methods.validPassword = function(password) {
-    return bcrypt.compareSync(password, this.password);
+	try {
+    	return bcrypt.compareSync(password, this.password);
+    } catch (err) {
+    	logger.log('error', 'Error validating password', err);
+    	return false;
+    }
 };
 
 userSchema.methods.newUser = function (userType, userToCreate) {
@@ -50,13 +55,7 @@ userSchema.methods.createUser = function(userToCreate, userType, callback) {
 	var user = new usersType[userType](userToCreate);
 	user.password = user.generateHash(user.password);
 
-	user.save(function (err, savedUser) {
-		if (err) {
-			logger.log('error', err);
-			return null;
-		}
-		callback(err, savedUser);
-	});
+	return user.save(); 
 };
 
 userSchema.methods.findByNameOrEmail = function(identification, callback, userType) {
@@ -92,16 +91,7 @@ userSchema.methods.findByName = function(callback, userType) {
 	} else {
 		query = User.findOne(options);
 	}
-
-	return query.exec();
-	// function(err, user){
-	// 	if(err) {
-	// 		logger.log('error', 'error finding a user by username:' + this.username);
-	// 		logger.log('error', err);
-	// 		return err;
-	// 	}
-	// 	callback(err, user);
-	// });
+	return query.populate('store').exec();
 };
 
 userSchema.methods.update = function(callback, userType) {
@@ -151,7 +141,7 @@ var User =  mongoose.model('User', userSchema);
 
 //Definition of Seller
 var sellerSchema = new AbstractUserSchema({
-	// store: { type: Schema.Types.ObjectId, ref: 'Store' },
+	store: { type: Schema.Types.ObjectId, ref: 'Store' },
 	website: String
 });
 
