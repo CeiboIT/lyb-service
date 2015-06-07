@@ -17,6 +17,7 @@ angular
     'ceibo.ui',
     'ceibo.d3',
     'ceibo.auth',
+    'ceibo.login',
     // 'mgcrea.ngStrap',
     'smart-table',
     'fileReaderModule',
@@ -34,16 +35,41 @@ angular
     'ui.select', 
     'ngSanitize'
   	])
-  .constant('apiBaseUrl', 'http://' + window.location.host)
   .config(['$stateProvider','$urlRouterProvider', '$httpProvider', 'restConfigProvider',
     function ($stateProvider, $urlRouterProvider, $httpProvider, restConfigProvider) {
 
     restConfigProvider.setBaseUrl('/');
 
     $httpProvider.interceptors.push('responseErrorInterceptor');
+    $httpProvider.interceptors.push('authInterceptor');
+
 
     $urlRouterProvider.otherwise('/stores/list');
     
+    // https://vickev.com/#!/article/authentication-in-single-page-applications-node-js-passportjs-angularjs
+    var checkLoggedin = function ($q, $timeout, $http, $location, $state) {
+      // Initialize a new promise
+      var deferred = $q.defer();
+
+      // Make an AJAX call to check if the user is logged in
+      $http.get('/auth/loggedin').success(function(user){
+        // Authenticated
+        if (user !== '0')
+          /*$timeout(deferred.resolve, 0);*/
+          deferred.resolve();
+
+        // Not Authenticated
+        else {
+          //$timeout(function(){deferred.reject();}, 0);
+          deferred.reject();
+          $state.go('login');
+          // $location.url('/login');
+        }
+      });
+
+      return deferred.promise;
+    };
+
     $stateProvider
 
       /*** STORES ***/
@@ -52,20 +78,25 @@ angular
         abstract: true,
         templateUrl: 'scripts/modules/landing/layout.html',
         controller: 'LandingController',
-        controllerAs: 'landing'
+        controllerAs: 'landing',
+        resolve: {
+            loggedIn: checkLoggedin
+        }
       })
+
+      .state('login', {
+          url: '/login',
+          templateUrl: 'scripts/modules/security/login.html',
+          controller: 'LoginController',
+          controllerAs: 'login'
+      })
+
       .state('stores', {
         parent: 'layout',
         url: '/stores',
         abstract : true,
         template: '<ui-view/>'
       })
-
-    	// .state('stores.list', {
-    	//   url: '/list',
-    	//   templateUrl: 'views/stores/list.html',
-    	//   controller: 'StoreViewController as entityController'
-    	// })
       
       /*** CATEGORIES ***/
 
@@ -131,9 +162,6 @@ angular
           }
         }
       });
-    }])
-    .run(['authService', function (authService) {
-        authService.loginAsAdmin();
     }])
     .factory('responseErrorInterceptor', function ($q, $log) {
         return {
