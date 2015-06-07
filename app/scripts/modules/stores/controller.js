@@ -26,7 +26,6 @@
 					storeController.goToStore = goToStore;
 				});
 	};
-	// StoreViewController.$inject = ['$templateCache', 'storeService', 'categoryService', 'categoryCreateOrUpdateMixin', 'entityManagerView'];
 
 	angular.module('stores')
 		.config(['$stateProvider', function($stateProvider) {
