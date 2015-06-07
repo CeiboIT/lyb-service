@@ -46,8 +46,6 @@ app.use(express.static(path.join(process.env.PWD, 'app')));
 
 app.use('/bower_components', express.static(path.join(process.env.PWD, '/bower_components')));
 //Routes front
-// var routes = require('./routes/index');
-// app.use('/', routes);
 
 //Defining which controller will be managing the calls in that endpoints.
 app.use('/users', users);
