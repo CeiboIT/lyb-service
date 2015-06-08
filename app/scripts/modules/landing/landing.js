@@ -25,16 +25,17 @@
 				});
 		};
 
+		landing.menuItems = [ {
+			name: 'Products',
+			state: 'products.list'
+		},
+		{
+			name: 'Categories',
+			state: 'categories.list'
+		}];
+
 		if (authService.isAdmin()) {
-			landing.menuItems = [
-				{
-					name: 'Products',
-					state: 'products.list'
-				},
-				{
-					name: 'Categories',
-					state: 'categories.list'
-				},
+			landing.menuItems = landing.menuItems.concat([
 				{
 					name: 'Users',
 					state: 'users.list'
@@ -47,17 +48,7 @@
 					name: 'Stats',
 					state: 'stats.general'
 				}
-			];
-		} else if (user.role === 'seller') {
-			landing.menuItems = [
-				{
-					name: 'Products',
-					state: 'products.list'
-				},
-				{
-					name: 'Categories',
-					state: 'categories.list'
-				}];
+			]);
 		}
 	}]);
 
