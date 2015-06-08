@@ -5,19 +5,13 @@ var populationOptions = require('../configs/general').populationOptions;
 
 var categoryService = {};
 
-categoryService.create = function(categoryDetails, callback) {
+categoryService.create = function(categoryDetails) {
 	var category = new Category(categoryDetails);
 	if (categoryDetails.parent) {
 		category.parent = categoryDetails.parent._id;
 	}
 	logger.log('categoryService.create > ', category);
-	category.save(function (err) {
-		if (err) {
-			logger.error('categoryService.create > ' + err);
-			return err;
-		}
-		callback(category);
-	});
+	return category.save();
 };
 
 categoryService.findAll = function(callback) {
