@@ -5,7 +5,11 @@ var logger = require('../configs/log');
 var storeService = {};
 
 var validateStore = function (ownerData) {
-	return usersService.isUnique(ownerData.username);
+	try {
+		return usersService.isUnique(ownerData.username);
+	} catch (error) {
+		logger.log('error', 'Error validating store', error);
+	}
 };
 
 storeService.create = function(storeData) {
@@ -51,7 +55,7 @@ storeService.findAll = function(callback) {
 
 };
 
-storeService.getStoreById = function(storeId, callback) {
+storeService.getStoreById = function(storeId) {
 	var query = Store.findOne({'_id' : storeId});
 	query.populate(populationOptions.owner);
 	query.populate(populationOptions.categories);
