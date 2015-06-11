@@ -36,9 +36,24 @@
 			});
 	};
 
+	var plain = function (categories) {
+		var result = [];
+		angular.forEach(categories, function(category) {
+			result.push(category);
+			if (category.subCategories.length > 0) {
+				_.map(category.subCategories, function (subCategory) {
+					subCategory.child = true;
+				});
+				result = result.concat(category.subCategories);
+			}
+		});
+		return result;
+	};
+
 	angular.module('products')
 		.run(function (loadTemplate) {
-			loadTemplate('views/products/create.html', 'product_create');
+			loadTemplate('scripts/modules/products/create.html', 'product_create');
 		})
+		.filter('plain', function () { return plain; })
 		.controller('ProductViewController', ProductViewController);
 }());

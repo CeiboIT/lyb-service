@@ -17,11 +17,8 @@
 		};
 	};
 
-	var productsService = function (entityService, collectCategoryId, authService) {
-		var formatters = {
-			preSave: collectCategoryId,
-			preUpdate: collectCategoryId },
-			service = entityService.getCrudFor('products', formatters);
+	var productsService = function (entityService) {
+		var service = entityService.getCrudFor('products');
 
 		service.newEntity = function () {
 			return {

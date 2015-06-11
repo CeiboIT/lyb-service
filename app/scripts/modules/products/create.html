@@ -1,0 +1,77 @@
+<div class="modal-header" >
+  <button type="button" class="close">
+    <span class="glyphicon glyphicon-question-sign" ></span>
+  </button>
+  <h4 class="modal-title">Product</h4>
+</div>
+
+<form name="createController.entityForm" novalidate class="css-form form-horizontal" ng-submit="createController.ok()">
+
+<div class="modal-body">
+	<div class="container-fluid" ng-class="{ hidden: createController.entityErrors.length > 0 }">
+
+		<div class="form-group required">
+            <label class="control-label col-sm-3">Name:</label>
+            <div class="col-sm-8">
+                <input name="name"
+                       required
+                       type="text"
+                       ng-class="{ 'has-error': createController.entityForm.name.$dirty && createController.entityForm.name.$invalid }"
+                       class="form-control first_input"
+                       ng-model="createController.entity.name">
+            </div>
+        </div>
+
+        <div class="form-group required">
+            <label class="control-label col-sm-3">Description:</label>
+            <div class="col-sm-8">
+                <textarea name="description"
+                   required
+                   ng-class="{ 'has-error': createController.entityForm.description.$dirty && createController.entityForm.description.$invalid }"
+                   class="form-control first_input"
+                   ng-model="createController.entity.description">
+                </textarea>
+            </div>
+        </div>
+
+		<div class="form-group required">
+      <label class="control-label col-sm-3">Price:</label>
+      <div class="col-sm-8">
+        <input name="price"
+               required
+               type="text"
+               ng-class="{ 'has-error': createController.entityForm.price.$dirty && createController.entityForm.price.$invalid }"
+               class="form-control first_input"
+               ng-model="createController.entity.price">
+      </div>
+    </div>
+    
+    <ng-include src="'scripts/modules/products/create_categories.html'"></ng-include>
+    <ng-include src="'scripts/modules/products/create_images.html'"></ng-include>
+
+    <div class="error-list">
+      <ul ng-class="{ 'hidden': entityErrors.length == 0 }">
+          <li ng-repeat="errorItem in createController.entityErrors">
+              <i class="glyphicon glyphicon-warning-sign text-warning"></i> &nbsp; {{errorItem.text}}
+          </li>   
+      </ul>
+    </div>
+	</div> <!-- container fluid -->
+</div> <!-- modal body -->
+
+<div class="modal-footer">
+  
+    <!-- https://docs.angularjs.org/api/ng/directive/form#submitting-a-form-and-preventing-the-default-action -->
+    <a class="btn btn-default"
+       ng-click="createController.cancel()"
+       ng-class="{ 'hidden': createController.entityErrors.length > 0 }">
+       Cancel
+    </a> <!-- van anchors porque si es button, submitea el form -->
+  
+    <button id="ok_button"
+            type="submit"
+            ng-class="{ 'hidden': createController.entityErrors.length > 0 }"
+            ng-disabled="createController.entityForm.$invalid || createController.isClean()"
+            class="btn btn-success">Save</button>
+</div>
+</form>
