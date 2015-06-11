@@ -4,11 +4,22 @@ var logger = console;
 var productService = {};
 
 productService.create = function(productData, user) {
+	var categoriesId = [];
+
+	productData.categories.forEach(function (category) {
+		categoriesId.push(category._id);
+	});
+	delete productData.categories;
 	var product = new Product(productData);
+	product.categories = categoriesId;
+
 	logger.log('productService.create > ', productData);
 
 	product.store = user.store._id;
-	return product.save();
+	return product.save()
+		.then(function(savedProduct) {
+			return Product.populate(savedProduct, {path: 'categories'});
+		});
 };
 
 productService.delete = function(productId, callback) {
@@ -21,21 +32,6 @@ productService.delete = function(productId, callback) {
 	});
 };
 
-productService.findProductByName = function(searchForName, callback) {
-
-	var query = Product.find({name : searchForName});
-
-	query.populate(populationOptions.seller);
-	query.populate(populationOptions.categories);
-	query.populate(populationOptions.store);
-	query.exec(function(err, response){
-		if(err) {
-			return err;
-		}
-		callback(response);
-	});
-};
-
 productService.findAll = function(user) {
 	if (user.store && user.store._id) {
 		return Product.find({store: user.store._id})
@@ -45,25 +41,19 @@ productService.findAll = function(user) {
 			.exec();
 	} else {
 		return Product.find()
-		.populate(populationOptions.seller)
-		.populate(populationOptions.categories)
-		.populate(populationOptions.store)
-		.exec();
+			.populate(populationOptions.seller)
+			.populate(populationOptions.categories)
+			.populate(populationOptions.store)
+			.exec();
 	}
 };
 
-productService.getProductById = function(productId, callback) {
-
+productService.getProductById = function(productId) {
 	var query = Product.findOne({'_id': productId});
 	query.populate(populationOptions.seller);
-	query.populate(populationOptions.categories);
+	query.populate('categories.subCategories');
 	query.populate(populationOptions.store);
-	query.exec(function(err, response){
-		if(err) {
-			return err;
-		}
-		callback(response);
-	});
+	return query.exec();
 };
 
 productService.update= function(product, callback) {
