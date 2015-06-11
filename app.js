@@ -7,7 +7,6 @@ var bodyParser = require('body-parser');
 var cors = require('cors');
 var session = require('express-session');
 var passportConf = require('./configs/passport');
-var passport = require('passport');
 //Routes managers
 /* *** Requires the controllers *** */
 
@@ -17,6 +16,9 @@ var products = require('./controllers/productsCtrl');
 var auth = require('./controllers/authCtrl');
 var stores = require('./controllers/storesCtrl');
 var statistics = require('./controllers/statisticsCtrl');
+
+// populate database with initial data
+var initialData = require('./schemas/initialData');
 /*** * ** *****/
 process.env.PWD = process.cwd();
 
