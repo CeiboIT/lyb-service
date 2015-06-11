@@ -5,8 +5,7 @@ var categorySchema = new Schema({
 	title: String,
 	description: String,
 	parent: { type: Schema.Types.ObjectId, ref: 'Category' },
-	// properties : {},
-	// subCategories: [{ type: Schema.Types.ObjectId, ref: 'SubCategory' }]
+	subCategories: [{ title: String, description: String }]
 });
 
 module.exports = mongoose.model('Category', categorySchema);
