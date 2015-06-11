@@ -4,7 +4,7 @@ var logger = require('../configs/log.js');
 
 router.post('/', function(req, res){
 	categoryService.create(req.body)
-		.then( function(response){
+		.then(function (response){
 			res.send(response);
 		}, function (err) {
 			logger.log('error', err);
@@ -12,32 +12,37 @@ router.post('/', function(req, res){
 		});
 });
 
-router.get('/', function(req, res){
-	categoryService.findAll(function(response){
-		res.send(response);
-	});
+router.get('/', function (req, res) {
+	categoryService.findAll()
+		.then(function (response) {
+			res.send(response);
+		}, function (error) {
+			logger.log('error', 'Error retrieving all categories', error);
+		});
 });
 
-router.get('/parents', function(req, res){
-	categoryService.findAllParents(function(response){
-		res.send(response);
-	});
+router.get('/parents', function (req, res) {
+	categoryService.getParents()
+		.then(function (response) {
+			res.send(response);
+		}, function (error) {
+			logger.log('error', 'Error retrieving parents', error);
+		});
+});
+
+router.get('/ordered', function (req, res) {
+	categoryService.ordered()
+		.then(function (response) {
+			res.send(response);
+		}, function (error) {
+			logger.log('error', 'Error retrieving parents', error);
+		});
 });
 
 router.put('/:id', function(req, res){
 	categoryService.update(req.body, function(response){
 		res.send(response);
 	});
-});
-
-router.get('/get-category-by-id', function(req, res){
-
-	var categoryId = req.query.categoryId;
-
-	categoryService.getCategoryById(categoryId, function(response){
-		res.send(response);
-	});
-
 });
 
 //Needs to determine the logic of a deletion and if is possible to delete a category
