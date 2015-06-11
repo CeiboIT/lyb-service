@@ -124,7 +124,7 @@ angular
 
       .state('products.list', {
         url: '/list',
-        templateUrl: 'views/products/list.html',
+        templateUrl: 'scripts/modules/products/list.html',
         controller: 'ProductViewController as entityController'
       })
 
