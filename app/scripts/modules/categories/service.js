@@ -44,6 +44,13 @@
 	var categoryService = function (entityService) {
 		var service = entityService.getCrudFor('categories'); 
 
+		service.getAll = function () {
+			return service.rest.one('ordered').get()
+				.then(function (response) {
+					return _.values(response.plain());
+				});
+		};
+
 		service.getParents = function () {
 			return service.rest.one('parents').getList();
 		};

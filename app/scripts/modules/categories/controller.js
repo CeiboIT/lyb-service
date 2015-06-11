@@ -8,15 +8,19 @@
 	});
 
 	Category.controller('CategoryViewController', 
-		['$templateCache','categoryService', 'entityManagerView', 'ownerMixin',
-		function ($templateCache, categoryService, entityManagerView, ownerMixin) {
+		['$templateCache','categoryService', 'entityManagerView', 'categoryCreateOrUpdateMixin',
+		 'authService','ownerMixin',
+		function ($templateCache, categoryService, entityManagerView, categoryCreateOrUpdateMixin,
+		 authService, ownerMixin) {
 		// Controller for the Category view
 		var categoryController = this;
 
 		var opts = {
 	        entityService: categoryService,
 	        createTemplate: $templateCache.get('category_create'),
-	        createOrUpdateMixins: [ownerMixin()],
+	        createOrUpdateMixins: [categoryCreateOrUpdateMixin(), 
+	        { isAdmin: authService.isAdmin() },
+	        ownerMixin()],
 	        listName: 'Categories',
 	        newName: 'Add category',
 	        noResultsText: 'No results found',
@@ -28,6 +32,11 @@
 			description: ''
 		};
 		
+		if (authService.isAdmin()) {
+			categoryController.perms = { editParents: true };
+		} else {
+			categoryController.perms = { editParents: false };	
+		}
 
 		var filterCategories = function (entity) { 
             return entity.title.match(categoryController.filters.title) ||
@@ -41,15 +50,16 @@
 			});
 	}]);
 
-	Category.factory('ownerMixin', ['authService', 'categoryService', function(authService, categoryService) {
+	Category.factory('ownerMixin', ['authService', 'categoryService', 
+		function(authService, categoryService) {
 		return function () {
 			var response = {
 				isAdmin: authService.isAdmin()
 			};
 			if (!response.isAdmin) {
-				response.parentCategories = categoryService.getParents().$object;
+				// response.parentCategories = categoryService.getParents().$object;
 					// .then(function (response) {
-						// response.parentCategories = response;
+					// 	response.parentCategories = response;
 					// });
 			}
 			return response;

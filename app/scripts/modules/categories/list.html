@@ -5,29 +5,29 @@
 <div class="spacer"></div>
 
 <div class="row">
-  <div class="col-md-12">
-    <div class="col-md-6" 
-         ng-repeat="entity in entityController.entityManager.entities | filter: entityController.entityManager.filterFn">
-      <div class="panel panel-success">
-        <div class="panel-heading"> 
-            {{ entity.parent.title }} <i ng-if="entity.parent.title" class="fa fa-angle-right"></i> 
-            {{ entity.title }}
-        </div>
-        <div class="panel-body">
-          <div class="col-md-6">
-            {{entity.description}}
-            <!-- <img src="{{ store.photo.content}}" alt="" class="img-thumbnail"> -->
-          </div>
-          <div class="col-md-12">
-            <div class="pull-right">
-              <a class="btn btn-primary btn-sm" 
-                 ng-click="entityController.entityManager.edit(entity)">
-                  Edit
-              </a>
+    <ol class="list-group">
+      <li class="list-group-item"
+          ng-repeat="category in entityController.entityManager.entities">
+            {{category.title}} {{category.description}}
+
+            <div class="btn-group btn-group-xs pull-right" role="group" 
+                 ng-click="entityController.entityManager.edit(category)"
+                 ng-if="entityController.perms.editParents">
+                <button class="btn btn-default">edit</button>
+                <button class="btn btn-primary"><i class="fa fa-edit"></i></button>
             </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+          </span>
+        <ol class="list-group nested" ng-if="category.subCategories.length > 0">
+          <li class="list-group-item"
+              ng-repeat="subCategory in category.subCategories">
+              {{subCategory.title}}
+              <div class="btn-group btn-group-xs pull-right" role="group" 
+                 ng-click="entityController.entityManager.edit(category)">
+                <button class="btn btn-default">edit</button>
+                <button class="btn btn-primary"><i class="fa fa-edit"></i></button>
+            </div>
+          </li>
+        </ol>
+      </li>
+    </ol>
 </div>

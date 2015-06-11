@@ -52,3 +52,28 @@
 	width: 30%;
 	margin: auto;
 }
+
+div.angular-ui-tree-handle {
+	cursor: default;
+	margin-bottom: 1px;
+	border-bottom: 1px solid #e7e7e7;
+	padding: 8px; 
+}
+
+.list-group.nested {
+	margin-top: 20px;
+}
+
+.categoryItem {
+	margin-left: 8px;
+}
+
+.subCategory {
+	margin-left: 8px;
+}
+
+.subCategory::before {
+	content: "\f105";
+	margin-right: 5px;
+	font: normal normal normal 14px/1 FontAwesome;
+}
