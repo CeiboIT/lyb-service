@@ -48,10 +48,9 @@ var usersService = {
 				callback(response);
 			});
 	},
-	getUserByName : function(findUserName, callback) {
-		var user = new Users(),
-			query = Users.findOne({username : findUserName});
-		return query.exec();
+	getUserByName : function(findUserName) {
+		return Users.findOne({username : findUserName})
+			.exec();
 		// function(err, response){
 		// 	callback(err, response);
 		// });
@@ -66,7 +65,7 @@ var usersService = {
 
 //SELLERS
 usersService.Sellers = {
-	create: function (sellerData, callback) {
+	create: function (sellerData) {
 		var seller = new Seller(sellerData);
 		return seller.createUser(sellerData, 'Seller')
 			.then(function (user) {
@@ -75,9 +74,6 @@ usersService.Sellers = {
 				logger.log('error', error);
 				throw error;
 			});
-			// , function(err, response){
-			// logger.log('debug', 'create Seller ' + sellerData);
-			// callback(err, response);
 	},
 	findAll: function (callback) {
 		Seller.find({},
