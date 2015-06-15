@@ -26,9 +26,6 @@ process.env.PWD = process.cwd();
 //Express app inited
 var app = express();
 
-//Configurations module
-var configs = require('./configs/module');
-
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
@@ -38,8 +35,8 @@ app.use(morgan('dev'));
 app.use(cors());
 app.use(cookieParser());
 app.use(bodyParser());
-app.use(bodyParser.urlencoded());
-app.use(bodyParser.json(configs.general.bodyLimit));
+app.use(bodyParser.json({limit: '16mb'}));
+app.use(bodyParser.urlencoded({limit: '16mb', extended: true}));
 app.use(session({ secret: 'luxury', saveUninitialized: true, resave: true }));
 app.use(passportConf.initialize);
 app.use(passportConf.session);
