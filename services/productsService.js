@@ -50,8 +50,8 @@ productService.findAll = function(user) {
 
 productService.getProductById = function(productId) {
 	var query = Product.findOne({'_id': productId});
+	query.populate('parent');
 	query.populate(populationOptions.seller);
-	query.populate('categories.subCategories');
 	query.populate(populationOptions.store);
 	return query.exec();
 };
@@ -69,6 +69,11 @@ productService.update= function(product, callback) {
 			}
 			callback(store);
 		});
+};
+
+productService.like = function (productId, user) {
+	// likeService.create(product, user);
+	return productService.getProductById(productId);
 };
 
 module.exports = productService;
