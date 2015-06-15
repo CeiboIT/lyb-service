@@ -1,5 +1,7 @@
 var router = require('express').Router();
 var productsService = require('../services/productsService');
+var passportConf = require('../configs/passport');
+var passport = require('passport');
 var logger = require('../configs/log.js');
 
 
@@ -21,16 +23,17 @@ router.delete('/:id', function(req, res){
 	});
 });
 
-router.get('/', function(req, res){
-	var user = req.session.user;
-	productsService.findAll(user)
-		.then(function(products) {
-			res.send(products);
-		}, function(err) {
-			logger.log('err', err);
-			res.send(500);
-		});
-});
+router.get('/', 
+	function(req, res){
+		var user = passportConf.getUser(req);
+		productsService.findAll(user)
+			.then(function(products) {
+				res.send(products);
+			}, function(err) {
+				logger.log('err', err);
+				res.send(500);
+			});
+	});
 
 router.get('/:id', function(req, res){
 	var productId = req.params.id;
@@ -51,6 +54,15 @@ router.put('/:id', function(req, res){
 	productsService.update(productToUpdate, function(response){
 		res.send(response);
 	});
+});
+
+router.post('/:id/like', function(req, res){
+	var user = req.session.user;
+	// productsService.like(req.params.id, user)
+		// .then(function (response) {
+			logger.log('debug');
+			res.send(200);			
+		// });
 });
 
 module.exports = router;
