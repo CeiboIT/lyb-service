@@ -159,7 +159,13 @@ var buyerSchema = new AbstractUserSchema({
 		items : []
 	},
 	ordersHistory : [],
-	lastViewedItems : []
+	lastViewedItems : [],
+	facebook: {
+		id: String,
+		token: String,
+		name: String,
+		email: String
+	}
 });
 
 //Put it all together for prepare for export;
