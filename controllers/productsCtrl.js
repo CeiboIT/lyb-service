@@ -56,13 +56,12 @@ router.put('/:id', function(req, res){
 	});
 });
 
-router.post('/:id/like', function(req, res){
-	var user = req.session.user;
-	// productsService.like(req.params.id, user)
-		// .then(function (response) {
-			logger.log('debug');
+router.post('/:id/like', passportConf.isAuthenticated, function(req, res){
+	var user = passportConf.getUser(req);
+	productsService.like(req.params.id, user)
+		.then(function () {
 			res.send(200);			
-		// });
+		});
 });
 
 module.exports = router;

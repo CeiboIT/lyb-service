@@ -72,8 +72,10 @@ productService.update= function(product, callback) {
 };
 
 productService.like = function (productId, user) {
-	// likeService.create(product, user);
-	return productService.getProductById(productId);
+	return productService.getProductById(productId)
+		.then(function () {
+			likeService.create(product, user);
+		});
 };
 
 module.exports = productService;
