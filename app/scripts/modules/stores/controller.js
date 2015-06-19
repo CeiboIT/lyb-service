@@ -16,14 +16,23 @@
 		        noResultsText: 'No results found',
 		        confirmText: 'Are you sure?'
 		    },
-	    	goToStore = function (store) {
-		    	authService.loginAsSeller(store);
-			};
+	        filterFn = function (entity) {
+	    		var name = true,
+	    			location = true;
+
+	    		if (storeController.filters && storeController.filters.name) {
+	    			name = entity.name.match(new RegExp(storeController.filters.name, 'i'));
+	    		}
+	    		if (storeController.filters && storeController.filters.location) {
+	    			name = entity.location.match(new RegExp(storeController.filters.location, 'i'));
+	    		}
+	    		return name && location;
+	    	};
 
 			entityManagerView.createFor(opts)
 				.then(function(entityManager) {
 					storeController.entityManager = entityManager;
-					storeController.goToStore = goToStore;
+					storeController.entityManager.filterFn = filterFn;
 				});
 	};
 

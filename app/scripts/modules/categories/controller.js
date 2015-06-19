@@ -27,11 +27,6 @@
 	        confirmText: 'Are you sure?'
 	    };
 
-		categoryController.filters = {
-			title: '',
-			description: ''
-		};
-		
 		if (authService.isAdmin()) {
 			categoryController.perms = { editParents: true };
 		} else {
@@ -39,8 +34,12 @@
 		}
 
 		var filterCategories = function (entity) { 
-            return entity.title.match(categoryController.filters.title) ||
-                entity.description.match(categoryController.filters.description);
+			var title = true;
+			// TODO add nested search into subCategories
+			if (categoryController.filters && categoryController.filters.title) {
+				title = entity.title.match(new RegExp(categoryController.filters.title, 'i'));
+			}
+            return title;
     	};
 
 		entityManagerView.createFor(opts)

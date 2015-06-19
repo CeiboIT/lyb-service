@@ -7,7 +7,7 @@
 <div class="row">
     <ol class="list-group">
       <li class="list-group-item"
-          ng-repeat="category in entityController.entityManager.entities">
+          ng-repeat="category in entityController.entityManager.entities | filter: entityController.entityManager.filterFn">
             {{category.title}} {{category.description}}
 
             <div class="btn-group btn-group-xs pull-right" role="group" 

@@ -137,14 +137,6 @@ angular
         template: '<ui-view/>'
       })
 
-      .state('users.list', {
-        url: '/list',
-        templateUrl: 'views/users/list.html',
-        controller: 'UserViewController as entityController'
-      })
-
-      /*** ***/ 
-
       .state('stats', {
         parent: 'layout',
         url: '/stats',

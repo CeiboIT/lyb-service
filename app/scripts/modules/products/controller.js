@@ -18,11 +18,6 @@
 			        confirmText: 'Are you sure?',
 			    };
 			    
-		productController.filters = {
-			name: '',
-			description: ''
-		};
-
 		if (authService.isAdmin()) {
 			productController.perms = { add: false };
 		} else {
@@ -32,11 +27,27 @@
 		entityManagerView.createFor(opts)
 			.then(function (entityManager) {
 				productController.entityManager = entityManager;
-				// productController.entityManager.filterFn = filterCategories;
+				productController.entityManager.filterFn = filterFn;
 			});
+		
+		var filterFn = function (entity) {
+	        var name = true,
+	            description = true;
+
+	        if (productController.filters && productController.filters.name) {
+	        	name = entity.name.match(new RegExp(productController.filters.name, 'i'));
+	        }
+
+	        if (productController.filters && productController.filters.description) {
+	        	description = entity.description.match(new RegExp(productController.filters.description, 'i'));
+	        }
+
+	        return name && description;
+		};
 	};
 
 	var plain = function (categories) {
+		// transform the categories array to be displayed in a ui-select
 		var result = [];
 		angular.forEach(categories, function(category) {
 			result.push(category);
