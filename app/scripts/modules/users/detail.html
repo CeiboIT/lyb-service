@@ -1,0 +1,40 @@
+<div class="panel panel-success">
+  <div class="panel-heading">{{userView.user.username}}</div>
+  <div class="panel-body">
+    <div class="col-md-6">
+      <img ng-if="userView.user.profilePhoto.content" 
+           class="img-thumbnail" 
+           ng-src="{{userView.user.profilePhoto.content}}" alt="user profile image">
+
+      <img ng-if="!userView.user.profilePhoto.content" 
+           class="img-thumbnail" 
+           ng-src="/images/profile-default.jpg" alt="default user profile image">
+    </div>
+    <div class="col-md-6">
+      <div class="row">
+          <div class="row">
+            <small class="text-muted">Name:</small>
+            <div class="col-md-12">
+                {{userView.user.name}}
+            </div>
+          </div>
+          <div class="row">
+            <small class="text-muted">Email:</small>
+            <div class="col-md-12">
+                {{userView.user.email}}
+            </div>
+          </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-12">
+          <div class="pull-right">
+            <a class="btn btn-primary btn-sm">
+               Edit
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div> <!-- panel body -->
+</div> <!-- panel success -->

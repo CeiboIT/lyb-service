@@ -1,0 +1,13 @@
+<div class="spacer"></div>
+<ng-include src="'/scripts/modules/users/filters.html'"></ng-include>
+<div class="row line"></div>
+<div class="spacer"></div>
+
+<div class="row">
+  <div class="col-md-6"
+       ng-repeat="user in entityController.entityManager.entities | filter: entityController.entityManager.filterFn">
+    
+    <user-view model="user"></user-view>
+       
+  </div> <!-- col-md-6 -->
+</div>
