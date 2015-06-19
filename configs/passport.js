@@ -13,7 +13,6 @@ passportConf.isAuthenticated = function (req, res, next) {
         return next();
     }
     return passport.authenticate('facebook-token') (req, res, next);
-    // res.send(401);
 };
 
 passportConf.authenticate = function (req, res, next) {
