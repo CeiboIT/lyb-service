@@ -8,6 +8,14 @@ var FacebookStrategy = require('passport-facebook').Strategy;
 var FacebookTokenStrategy = require('passport-facebook-token').Strategy;
 
 
+passportConf.loginSocialUser = function (user) {
+    return users.User.findById(user._id)
+        .then( function (savedUser) {
+            savedUser.lastLogin = new Date();
+            return savedUser.save();
+        });        
+};
+
 passportConf.isAuthenticated = function (req, res, next) {
     if (req.isAuthenticated()) {
         return next();
@@ -107,40 +115,6 @@ passport.use(new FacebookTokenStrategy({
         });
     })
 );
-
-passport.use(new FacebookStrategy({
-        // pull in our app id and secret from our auth.js file
-        clientID: '822272877864083',
-        clientSecret: '3ce32e04717652e6174aae47d578cdfd',
-        callbackURL: 'localhost:9000/auth/facebook/callback'
-    },
-    // facebook will send back the token and profile
-    function(token, refreshToken, profile, done) {
-        // asynchronous
-        process.nextTick(function() {
-            // find the user in the database based on their facebook id
-            users.Buyer.findOne({ 'facebook.id' : profile.id }, function(err, user) {
-                // if there is an error, stop everything and return that
-                // ie an error connecting to the database
-                if (err) {
-                    return done(err);
-                }
-                // if the user is found, then log them in
-                if (user) {
-                    return done(null, user); // user found, return that user
-                } else {
-                    var newUser = createFacebookUser(profile, token);
-                    newUser.save(function(err) {
-                        if (err) {
-                            throw err;
-                        }
-                        // if successful, return the new user
-                        return done(null, newUser);
-                    });
-                }
-            });
-        });
-    }));
 
 passportConf.session = passport.session();
 passportConf.initialize = passport.initialize();
