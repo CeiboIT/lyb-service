@@ -16,6 +16,7 @@ function AbstractUserSchema() {
     	profilePhoto : {},
     	country: String,
     	bio: String,
+    	lastLogin: { type : Date },
     	creationDate: { type : Date, default: Date.now() }
     });                                     
 }                                          
