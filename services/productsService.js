@@ -1,5 +1,6 @@
 var Product = require('../schemas/productSchema');
 var populationOptions = require('../configs/general').populationOptions;
+var likeService = require('../services/likeService');
 var logger = console;
 var productService = {};
 
@@ -73,8 +74,8 @@ productService.update= function(product, callback) {
 
 productService.like = function (productId, user) {
 	return productService.getProductById(productId)
-		.then(function () {
-			likeService.create(product, user);
+		.then(function (product) {
+			return likeService.likeProduct(product, user);
 		});
 };
 

@@ -4,6 +4,7 @@ var Users = AbstractUsersTypes.User;
 var Seller = AbstractUsersTypes.Seller;
 var Buyer = AbstractUsersTypes.Buyer;
 var Admin = AbstractUsersTypes.Admin;
+var likeService = require('../services/likeService');
 
 var loadInitialUser = function () {
 	// Add default admin:admin user
@@ -54,6 +55,17 @@ var usersService = {
 		// function(err, response){
 		// 	callback(err, response);
 		// });
+	},
+	getUserById: function(userId) {
+		return Users.findById(userId)
+			.then(function (user) {
+				return likeService.getLikesFromUser(user)
+					.then(function (likes) {
+						var userObject = user.toObject();
+						userObject.tracking = { likes: likes };
+						return userObject;
+					});
+			});
 	},
 	update: function(usertoUpdate, callback, userType){
 		var user = new Users(usertoUpdate);
