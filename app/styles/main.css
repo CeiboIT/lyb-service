@@ -77,3 +77,27 @@ div.angular-ui-tree-handle {
 	margin-right: 5px;
 	font: normal normal normal 14px/1 FontAwesome;
 }
+
+.user-detail .img-thumbnail {
+	width: 50px;
+}
+
+.user-detail td  {
+    vertical-align: middle !important;
+}
+
+.user-detail .icon-action {
+	font-size: 20px;
+	margin-left: 10px;
+}
+
+.user-detail .icon-social {
+	width: 20px;
+	margin-right: 4px;
+}
+
+/* -- User -- */
+
+.likes-product {
+	margin-left: 3%;	
+}
