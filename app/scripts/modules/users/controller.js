@@ -2,7 +2,7 @@
 
 	'use strict';
 
-	var User = angular.module('users', []);
+	var User = angular.module('users');
 
 	User.config(['$stateProvider', function ($stateProvider) {
 		$stateProvider.state('users.list', {
@@ -16,8 +16,9 @@
 		loadTemplate('scripts/modules/users/create.html', 'user_create');
 	});
 
-	User.controller('UserViewController', ['$templateCache', 'userService', 'entityManagerView',
-		function ($templateCache, userService, entityManagerView) {
+	User.controller('UserViewController', 
+		['$templateCache', 'userService', 'entityManagerView', 'userFilter',
+		function ($templateCache, userService, entityManagerView, userFilter) {
 		// Controller for the User view
 		var userController = this,
 			opts = {
@@ -32,32 +33,39 @@
 			entityManagerView.createFor(opts)
 				.then(function(entityManager) {
 					userController.entityManager = entityManager;
+					userController.entityManager.filterFn = userFilter(userController);
 				});
+		
+		// userController.filters = {name: '', email: ''};
+
+	}]);
+
+	User.controller('UserDetailController', ['$modalInstance', 'user', 'userService',
+	function ($modalInstance, user) {
+		var controller = this;
+		controller.user = user;
+        controller.cancel = function () {
+            $modalInstance.dismiss('cancel');
+        };
+
 	}]);
 
 	User.directive('userView', function () {
 		return {
-			restrict: 'E',
+			restrict: 'AE',
 			scope: {
 				model: '='
 			},
-			templateUrl: 'scripts/modules/users/detail.html',
+			templateUrl: 'scripts/modules/users/list_detail.html',
 			controllerAs: 'userView',
-			controller: function ($scope) {
+			controller: function ($scope, userViewDetail, userProfileFormatter) {
 				var userView = this;
-				if ($scope.model.facebook) {
-					userView.user = {
-						username: $scope.model.facebook.name,
-						name: $scope.model.facebook.name,
-						email: $scope.model.facebook.email
-					};
-				} else {
-					userView.user = {
-						username: $scope.model.username,
-						name: $scope.model.username,
-						email: $scope.model.email
-					};
-				}
+				
+				userView.view = function (user) {
+					userViewDetail(user);
+				};
+
+				userView.user = userProfileFormatter($scope.model);
 			}
 		};
 	});

@@ -4,20 +4,24 @@
       <div class="col-md-1">
         <span class="text-huge">Users</span>
       </div>
-      <label class="col-md-1 control-label text-normal">Name</label>
+      <label class="col-md-1 control-label text-normal">Username</label>
       <div class="col-md-2">
         <input type="text" class="form-control input-sm" 
-               ng-model="entityController.filters.name">
+               ng-model="entityController.filters.username">
       </div>
       <label class="col-md-1 control-label text-normal">Email</label>
       <div class="col-md-2">
         <input type="text" class="form-control input-sm" 
-               ng-model="entityController.filters.location">
+               ng-model="entityController.filters.email">
       </div>
-      <label class="col-md-1 control-label text-normal">Country</label>
+      <label class="col-md-1 control-label text-normal">Type</label>
       <div class="col-md-2">
-        <input type="text" class="form-control input-sm" 
-               ng-model="entityController.filters.location">
+        <select class="form-control input-sm" 
+                ng-model="entityController.filters.type">
+          <option value="">All</option>
+          <option value="Seller">Seller</option>
+          <option value="Buyer">Buyer</option>
+        </select>
       </div>
       <div class="col-md-1"></div>
       <div class="col-md-1">

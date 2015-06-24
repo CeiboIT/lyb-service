@@ -1,0 +1,28 @@
+<td>
+  <img class="img-thumbnail" 
+     ng-src="{{userView.user.profilePhoto}}" alt="user profile image">
+</td>
+<td>
+  {{userView.user.username}}
+</td>
+<td>
+  {{userView.user.name}}
+</td>
+<td>
+  <img ng-if="userView.user.facebook"
+       class="icon-social"
+       ng-src="/images/facebook_icon.png">
+  {{userView.user.email}}
+</td>
+<td>
+  {{userView.user.creationDate | date:'MM/dd/yyyy @ h:mma'}}
+</td>
+<td>
+  <div class="text-right">
+    <i class="fa fa-edit icon-action"></i>
+    <i class="fa fa-remove icon-action"></i>
+    <a href="" ng-click="userView.view(userView.user)">
+      <i class="fa fa-user icon-action"></i>
+    </a>
+  </div>
+</td>

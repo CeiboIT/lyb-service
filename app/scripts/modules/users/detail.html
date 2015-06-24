@@ -1,40 +1,59 @@
-<div class="panel panel-success">
-  <div class="panel-heading">{{userView.user.username}}</div>
-  <div class="panel-body">
-    <div class="col-md-6">
-      <img ng-if="userView.user.profilePhoto.content" 
-           class="img-thumbnail" 
-           ng-src="{{userView.user.profilePhoto.content}}" alt="user profile image">
+<div class="modal-header" >
+  <button type="button" class="close">
+    <span class="glyphicon glyphicon-question-sign" ></span>
+  </button>
+    <h4 class="modal-title">User info</h4>
+</div>
 
-      <img ng-if="!userView.user.profilePhoto.content" 
-           class="img-thumbnail" 
-           ng-src="/images/profile-default.jpg" alt="default user profile image">
-    </div>
-    <div class="col-md-6">
-      <div class="row">
-          <div class="row">
-            <small class="text-muted">Name:</small>
-            <div class="col-md-12">
-                {{userView.user.name}}
-            </div>
-          </div>
-          <div class="row">
-            <small class="text-muted">Email:</small>
-            <div class="col-md-12">
-                {{userView.user.email}}
-            </div>
-          </div>
+<div class="modal-body">
+
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-2">
+        <img class="img-thumbnail" 
+             ng-src="{{detail.user.profilePhoto}}" alt="user profile image">
       </div>
-
-      <div class="row">
-        <div class="col-md-12">
-          <div class="pull-right">
-            <a class="btn btn-primary btn-sm">
-               Edit
-            </a>
-          </div>
+      <div class="col-md-10">
+        <div class="row">
+          <div class="col-md-3">Name:</div> {{detail.user.name}}
+        </div>
+        <div class="row">
+          <div class="col-md-3">Username:</div> {{detail.user.username}}    
+        </div>
+        <div class="row">
+          <div class="col-md-3">Email:</div> {{detail.user.email}}    
         </div>
       </div>
+    </div> <!-- row -->
+    <br><br>
+    <div class="row">
+      <h4>Access:</h4>
+      <div class="row">
+        <span class="col-md-3">member since: </span> 
+        <span class="col-md-6">{{detail.user.creationDate | date:'MM/dd/yyyy @ h:mma' }}</span>
+      </div>
+      <div class="row">
+        <span class="col-md-3">last login: </span> 
+        <span class="col-md-6">{{detail.user.lastLogin | date:'MM/dd/yyyy @ h:mma' }}</span>
+      </div>
     </div>
-  </div> <!-- panel body -->
-</div> <!-- panel success -->
+    <br>
+    <div class="row">
+      <h4>Gone for it</h4>
+        <ul class="list-unstyled">
+          <li ng-repeat="like in detail.user.tracking.likes">
+            <span class="likes-product">
+              <i class="fa fa-heart"> </i>&nbsp; &nbsp; {{like.product.name}}</span>
+          </li>
+        </ul>
+    </div>
+</div> <!-- modal-body -->
+
+<div class="modal-footer">
+  <!-- https://docs.angularjs.org/api/ng/directive/form#submitting-a-form-and-preventing-the-default-action -->
+  <a class="btn btn-default"
+     ng-click="detail.cancel()">
+      close
+  </a> <!-- van anchors porque si es button, submitea el form -->
+  
+</div>

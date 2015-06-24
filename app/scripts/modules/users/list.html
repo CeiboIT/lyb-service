@@ -3,11 +3,26 @@
 <div class="row line"></div>
 <div class="spacer"></div>
 
-<div class="row">
-  <div class="col-md-6"
-       ng-repeat="user in entityController.entityManager.entities | filter: entityController.entityManager.filterFn">
-    
-    <user-view model="user"></user-view>
-       
-  </div> <!-- col-md-6 -->
+<!-- <div class="row">
+
+      <tbody ng-repeat="user in entityController.entityManager.entities | filter: entityController.entityManager.filterFn">
+    	<tr>
+    		<user-view model="user"></user-view>
+    	</tr>
+      </tbody>
+    </table>
+ --> 
+<table class="table user-detail">
+  <thead>
+    <th></th>
+    <th>username</th>
+    <th>name</th>
+    <th>email</th>
+    <th>member since</th>
+    <th></th>
+  </thead>
+  <tbody>
+	<tr ng-repeat="user in entityController.entityManager.entities | filter: entityController.entityManager.filterFn" user-view model="user">
+  	</tr>
+  </tbody>
 </div>
