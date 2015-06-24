@@ -11,6 +11,13 @@ router.get('/', function (req, res) {
 	});
 });
 
+router.get('/:id', function (req, res) {
+	usersService.getUserById(req.params.id)
+		.then(function (user) {
+			res.send(user);
+		});
+});
+
 /**Sellers CRUD ***/
 router.post('/sellers', function(req, res){
 	sellersService.create(req.body, function(response){
