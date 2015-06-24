@@ -1,4 +1,4 @@
-// var passportConf = require('../configs/passport');
+var passportConf = require('../configs/passport');
 var router = require('express').Router();
 var User = require('../schemas/usersSchema').User;
 var passport = require('passport');
@@ -32,11 +32,14 @@ router.get('/facebook', passport.authenticate('facebook-token', function (req, r
 }));
 
 router.get('/facebook/callback',
-        passport.authenticate('facebook'),
+        passport.authenticate('facebook-token'),
         function (req, res) {
-        	logger.log('debug', 'logged user', req.user);
+        	logger.log('debug', '/facebook/callback > logged user', req.user);
         	req.session.user = req.user;
-			res.send({ identity: req.user });
+    		passportConf.loginSocialUser(req.user)
+    			.then(function () {
+					res.send({ identity: req.user });
+    			});
         });
 
 module.exports = router;
