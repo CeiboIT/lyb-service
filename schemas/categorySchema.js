@@ -3,7 +3,6 @@ var Schema = mongoose.Schema;
 
 var categorySchema = new Schema({
 	title: String,
-	description: String,
 	parent: { type: Schema.Types.ObjectId, ref: 'Category' },
 	subCategories: [{ title: String, description: String }]
 });
