@@ -50,17 +50,11 @@
 	}]);
 
 	Category.factory('ownerMixin', ['authService', 'categoryService', 
-		function(authService, categoryService) {
+		function(authService) {
 		return function () {
 			var response = {
 				isAdmin: authService.isAdmin()
 			};
-			if (!response.isAdmin) {
-				// response.parentCategories = categoryService.getParents().$object;
-					// .then(function (response) {
-					// 	response.parentCategories = response;
-					// });
-			}
 			return response;
 		};
 	}]); 
