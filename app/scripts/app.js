@@ -15,7 +15,6 @@ angular
     'ngAnimate',
     'ngToast',
   	'ui.router',
-    'ceibo.ui',
     'ceibo.d3',
     'ceibo.auth',
     'ceibo.login',
