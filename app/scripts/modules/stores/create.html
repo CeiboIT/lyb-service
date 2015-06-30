@@ -30,15 +30,15 @@
         </div>
       </div>
       <div class="form-group">
-        <label for="" class="col-md-2 control-label">Email</label>
+        <label class="col-md-2 control-label">Email</label>
         <div class="col-md-10">
-          <input type="text" class="form-control" id="" placeholder="" ng-model="createController.entity.email"/>
+          <input type="email" class="form-control" ng-model="createController.entity.email"/>
         </div>
       </div>
       <div class="form-group">
         <label for="" class="col-md-2 control-label">Web</label>
         <div class="col-md-10">
-          <input type="text" class="form-control" id="" placeholder="" ng-model="createController.entity.web"/>
+          <input type="url" class="form-control" placeholder="http://example.com" ng-model="createController.entity.web"/>
         </div>
       </div>  
       </div>
@@ -92,18 +92,32 @@
             </div>
         </div> <!-- row -->
       </div><!-- row -->
-      <div class="row">
+      <div class="row" ng-if="!createController.entity._id">
         <h4>Owner </h4>
         <div class="form-group" required>
-          <label for="" class="col-md-2 control-label">Username</label>
-          <div class="col-md-10">
-            <input type="text" required class="form-control" ng-model="createController.entity.owner.username">
+          <label class="col-md-2 control-label">Username</label>
+          <div class="col-md-5">
+            <input type="text" required class="form-control" name="username"
+                   alto-unique ng-minlength="5" ng-maxlength="15"
+                   ng-model="createController.entity.owner.username">
+            <div ng-show="createController.entityForm.username.$dirty && createController.entityForm.username.$invalid">
+              <span ng-show="createController.entityForm.username.$error.unique">
+                That username is taken, please try another
+              </span>
+              <span ng-show="createController.entityForm.username.$error.minlength">
+                Your username is required to be at least 5 characters
+              </span>
+              <span ng-show="createController.entityForm.username.$error.maxlength">
+                Your username cannot be longer than 15 characters
+              </span>
+            </div>
           </div>
         </div>
         <div class="form-group" required>
-          <label for="" class="col-md-2 control-label">Password</label>
-          <div class="col-md-10">
-            <input type="text" required class="form-control" ng-model="createController.entity.owner.password">
+          <label class="col-md-2 control-label">Password</label>
+          <div class="col-md-5">
+            <input type="password" required class="form-control" 
+                   ng-model="createController.entity.owner.password">
           </div>
         </div>
     </div> <!-- container -->

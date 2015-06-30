@@ -69,4 +69,34 @@
 			}
 		};
 	});
+
+	User.directive('altoUnique', ['$log', 'userService',
+	function ($log, userService) {
+    return {
+        restrict: 'A',
+        require: 'ngModel',
+        link: function ($scope, element, attrs, ngModel) {
+            element.bind('blur', function () {
+                if (!ngModel || !element.val()) {
+                    return;
+                }
+                var currentValue = element.val();
+                $log.debug('validate unique username: ' + currentValue);
+                userService.uniqueUsername(currentValue)
+                    .then(function (unique) {
+                        //Ensure value that being checked hasn't changed
+                        //since the Ajax call was made
+                        $log.debug('is unique? ' + currentValue + ' ' + unique);
+                        if (currentValue == element.val()) { 
+                            ngModel.$setValidity('unique', unique === true);
+                        }
+                    }, function () {
+                        $log.error('error in unique validation');
+                        ngModel.$setValidity('unique', false);
+                    });
+            });
+        }
+    };
+	}]);
+
 }());

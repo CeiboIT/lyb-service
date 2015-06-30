@@ -14,6 +14,13 @@
             }
             return sellerRest.post(entity);
 		};
+		service.uniqueUsername = function (username) {
+			return this.rest.one('username').one(username).get()
+				.then(function (response) {
+					return response === undefined;
+				});
+		};
+
 		return service;
 	}]);	
 

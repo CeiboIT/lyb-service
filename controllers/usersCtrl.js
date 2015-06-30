@@ -52,11 +52,12 @@ router.get('/retrieve-all', function(req, res){
 	});
 });
 
-router.get('/get-user-by-username', function(req, res){
-	var username = req.query.username;
-	usersService.getUserByName(username, function(response){
-		res.send(response);
-	});
+router.get('/username/:username', function(req, res){
+	var username = req.params.username;
+	usersService.getUserByName(username)
+		.then(function (response){
+			res.send(response);
+		});
 });
 
 router.post('/update', function(req, res){

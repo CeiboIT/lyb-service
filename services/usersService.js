@@ -50,11 +50,7 @@ var usersService = {
 			});
 	},
 	getUserByName : function(findUserName) {
-		return Users.findOne({username : findUserName})
-			.exec();
-		// function(err, response){
-		// 	callback(err, response);
-		// });
+		return Users.findOne({username : findUserName}).exec();
 	},
 	getUserById: function(userId) {
 		return Users.findById(userId)
