@@ -9,7 +9,7 @@
 	    type: 'jpeg'
 	};
 	
-	var storeService = function (entityService, collectCategoryId) {
+	var storeService = function (entityService, collectCategoryId, ngToast) {
 		var formatters = {
 			// befor send the entity to the server, this function will be applyed
 			preSave: collectCategoryId,
@@ -17,6 +17,7 @@
 		};
 
 		var service = entityService.getCrudFor('stores', formatters);
+		var _save = service.save;
 		// override default newEntity to create an empty store, with categories as array.
 		service.newEntity = function () {
 			return {
@@ -25,6 +26,13 @@
 				owner: {}
 			};
 		};
+		service.save = function (entity) {
+			return _save.apply(service, [entity]).then(function () {
+				ngToast.create('a new Store has been created ' + entity.name);
+			});
+
+		};
+
 		// formatter are apllyed before/after specific crud operation
 		return service;
 	};
