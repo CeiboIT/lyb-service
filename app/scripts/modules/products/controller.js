@@ -4,14 +4,14 @@
 
 	var ProductViewController = 
 		function ($templateCache, authService, productsService, entityManagerView, 
-			categoryCreateOrUpdateMixin, imageMixin) {
+			categoryCreateOrUpdateMixin, imageMixin, currencyMixin) {
 		
 		var productController = this,
 				opts = {
 			        entityService: productsService,
 			        createTemplate: $templateCache.get('product_create'),
 			        listName: 'Products',
-			        createOrUpdateMixins: [categoryCreateOrUpdateMixin(), imageMixin],
+			        createOrUpdateMixins: [categoryCreateOrUpdateMixin(), imageMixin, currencyMixin],
 			        scope: productController,
 			        newName: 'Add product',
 			        noResultsText: 'No results found',
