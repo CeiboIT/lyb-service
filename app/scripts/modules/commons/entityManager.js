@@ -29,6 +29,7 @@ EntityViews.factory('removeDialog', function ($modal, $templateCache) {
     return {
         createFor: function (options) {
             return $modal.open({
+                backdrop: 'static',
                 template: options.confirmTemplate || $templateCache.get('entity_remove_confirm'),
                 controller: 'RemoveEntityDialogController',
                 resolve: {
@@ -78,6 +79,7 @@ EntityViews.factory('createOrUpdateDialog', function ($modal) {
         createFor: function (options) {
             // angular.extends(CreateOrUpdateController, options.createOrUpdateMixin);
             var modalInstance = $modal.open({
+                backdrop: 'static',
                 template: options.createTemplate,
                 size: options.size || 'md',
                 controller: 'CreateOrUpdateController',
@@ -106,13 +108,6 @@ EntityViews.factory('applyMixins', function () {
 EntityViews.factory('entityManagerView', function (createOrUpdateDialog, removeDialog, $log) {
     return {
         createFor: function (options) {
-            function _createOrUpdateDialog() {
-                return createOrUpdateDialog.createFor({
-                    createTemplate: options.createTemplate,
-                    size: options.size,
-                    createOrUpdateMixins: options.createOrUpdateMixins
-                });
-            }
             var crudOps = {
                 updateList: function () {
                     return options.entityService.getAll()
@@ -133,36 +128,43 @@ EntityViews.factory('entityManagerView', function (createOrUpdateDialog, removeD
                 },
                 edit: function (entity) {
                     options.createOrUpdateMixins = options.createOrUpdateMixins || [];
-                    options.createOrUpdateMixins.push({
+                    var _entity = options.entityService.copy(entity); 
+                    var _editMixins = {
                         original: options.entityService.copy(entity),
-                        entity: entity,
+                        entity: _entity,
                         action: function () { // function to be applied when the "ok" button in the dialog is pressed
-                            return options.entityService.update(entity);
+                            return options.entityService.update(_entity);
                         }
-                    });
-                    _createOrUpdateDialog()
-                        .result.then(function () {
-                            crudOps.updateList();
-                        });        
+                    };
+                    createOrUpdateDialog.createFor({
+                        createTemplate: options.createTemplate,
+                        size: options.size,
+                        createOrUpdateMixins: options.createOrUpdateMixins.concat(_editMixins)})
+                    .result.then(function () {
+                        crudOps.updateList();
+                    });        
                 },
                 create: function () {
                     options.createOrUpdateMixins = options.createOrUpdateMixins || [];
                     // open a dialog to create a new entity
                     var newEntity = options.entityService.newEntity(); // new empty entity
                     // add mixin to the base CreateOrUpdateController to provide additional functions
-                    options.createOrUpdateMixins.push({
+                    var _createMixin = {
                         original: {}, // used in the isClean function to check if the user make any change to the object
                         entity: newEntity,
                         action: function () { // function to be applied when the "ok" button in the dialog is pressed
                             return options.entityService.save(newEntity);
                         }
-                    });
-                    
-                    _createOrUpdateDialog()
-                        .result.then(function () {
-                            $log.debug('entityManager created new entity');
-                            crudOps.updateList(); // update list after a change in the entity
-                        });
+                    };
+                  
+                    createOrUpdateDialog.createFor({
+                        createTemplate: options.createTemplate,
+                        size: options.size,
+                        createOrUpdateMixins: options.createOrUpdateMixins.concat(_createMixin)})
+                    .result.then(function () {
+                        $log.debug('entityManager created new entity');
+                        crudOps.updateList();
+                    });        
                 }
             };
             angular.extend(crudOps, options);
