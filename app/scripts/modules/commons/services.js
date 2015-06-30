@@ -42,10 +42,11 @@
                         return this.rest.getList();
                     },
                     update: function (entity) {
-                         if (formatters && formatters.preUpdate) {
-                            return formatters.preUpdate(entity).put();
+                        // entity.put() is not working when the entity is copied with Restangular.copy()
+                        if (formatters && formatters.preUpdate) {
+                            return this.rest.one(entity._id).customPUT(formatters.preUpdate(entity).plain());
                         }
-                        return entity.put();
+                        return this.rest.one(entity._id).customPUT(entity.plain());
                     },
                     save: function (entity) {
                         if (formatters && formatters.preSave) {
