@@ -37,8 +37,15 @@
                         <div class="row">
                             <small class="text-muted">categories</small>
                             <div class="col-md-12">
-                                <span class="label label-success category-listed" 
+                            <ul class="list-inline category-list">
+                              <li ng-repeat="category in product.categories">
+                                <span class="label label-success"> {{category.title}} </label>
+                              </li>
+                            </ul>
+                              <!-- <div class="row">
+                                <span class="label label-success category-listed col-md-2"
                                       ng-repeat="category in product.categories">{{category.title}}</span>
+                              </div> -->
                             </div>
                         </div>
                     </div> <!-- col-md-6 -->
