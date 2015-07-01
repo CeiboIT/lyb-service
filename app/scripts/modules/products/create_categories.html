@@ -13,7 +13,8 @@
 	</div>
 	<div class="col-md-2">
 		<button type="button" class="btn btn-success"
-				ng-click="createController.addCategory(createController.entity.categories, createController.newCategory)">
+				ng-click="createController.addCategory(createController.entity.categories, createController.newCategory);
+						 createController.isClean();"> <!-- TODO fix manually call to isClean -->
 			<i class="fa fa-plus"></i>
 		</button>
 	</div>
@@ -22,7 +23,7 @@
 <div class="row">
 	<div class="form-group">
 		<div class="col-md-10 col-md-offset-1">
-			<ul class="list-inline">
+			<ul class="list-inline category-list">
 				<li ng-repeat="category in createController.entity.categories">
 					<div class="btn-group btn-group-xs" role="group" 
 						 ng-click="createController.removeCategory(createController.entity.categories, category)">
