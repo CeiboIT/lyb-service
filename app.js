@@ -34,7 +34,7 @@ app.use(favicon());
 app.use(morgan('dev'));
 app.use(cors());
 app.use(cookieParser());
-app.use(bodyParser());
+// app.use(bodyParser());
 app.use(bodyParser.json({limit: '16mb'}));
 app.use(bodyParser.urlencoded({limit: '16mb', extended: true}));
 app.use(session({ secret: 'luxury', saveUninitialized: true, resave: true }));
