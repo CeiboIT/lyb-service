@@ -29,7 +29,8 @@
 }
 
 .store-listed-image {
-	max-height: 150px;
+	height: 120px;
+	width: 120px;
 }
 
 .product-list-image, .product-create-image {
@@ -101,3 +102,10 @@ div.angular-ui-tree-handle {
 .likes-product {
 	margin-left: 3%;	
 }
+
+/* -- Categories list -- */
+
+.list-inline.category-list li {
+	margin-top: 5px;
+}
+
