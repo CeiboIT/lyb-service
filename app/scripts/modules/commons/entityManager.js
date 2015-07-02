@@ -45,7 +45,7 @@ EntityViews.factory('removeDialog', function ($modal, $templateCache) {
 
 // The popup create a new scope, but inherit from a user specified scope.
 EntityViews.controller('CreateOrUpdateController', 
-    function ($log, $modalInstance, applyMixins, createOrUpdateMixins) {
+    function ($log, $window, $modalInstance, applyMixins, createOrUpdateMixins) {
         var controller = this;
 
         applyMixins(controller, createOrUpdateMixins);
@@ -56,15 +56,19 @@ EntityViews.controller('CreateOrUpdateController',
             return angular.equals(controller.original, controller.entity);
         };
 
-        controller.ok = function () {
-            $log.debug('CreateOrUpdateDialogController > ' + controller.action);
-            controller.action(controller.entity)
-                .then(function (response) {
-                    $modalInstance.close(response);
-                }, function () {
-                    $log.error('CreateOrUpdateDialogController');
-                    controller.entityErrors = [{text: 'Mmmmm, something went wrong, please try again.' }];
-                });
+        controller.ok = function (draft) {
+            if (draft) {
+                controller.actionDraft(controller.entity);
+                $modalInstance.close();    
+            } else {
+                controller.action(controller.entity)
+                    .then(function (response) {
+                        $modalInstance.close(response);
+                    }, function () {
+                        $log.error('CreateOrUpdateDialogController');
+                        controller.entityErrors = [{text: 'Mmmmm, something went wrong, please try again.' }];
+                    });
+            }
         };
 
         controller.cancel = function () {
@@ -105,7 +109,8 @@ EntityViews.factory('applyMixins', function () {
     };
 });
 
-EntityViews.factory('entityManagerView', function (createOrUpdateDialog, removeDialog, $log) {
+EntityViews.factory('entityManagerView', 
+    function ($log, $window, createOrUpdateDialog, removeDialog) {
     return {
         createFor: function (options) {
             var crudOps = {
@@ -147,13 +152,23 @@ EntityViews.factory('entityManagerView', function (createOrUpdateDialog, removeD
                 create: function () {
                     options.createOrUpdateMixins = options.createOrUpdateMixins || [];
                     // open a dialog to create a new entity
-                    var newEntity = options.entityService.newEntity(); // new empty entity
+                    var draft = this.getDraft();
+                    var newEntity =  draft || options.entityService.newEntity(); // new empty entity
                     // add mixin to the base CreateOrUpdateController to provide additional functions
                     var _createMixin = {
                         original: {}, // used in the isClean function to check if the user make any change to the object
                         entity: newEntity,
                         action: function () { // function to be applied when the "ok" button in the dialog is pressed
-                            return options.entityService.save(newEntity);
+                            return options.entityService.save(newEntity)
+                                .then(function (response) {
+                                    if (draft) {
+                                        $window.sessionStorage.removeItem(options.draftKey);
+                                    }
+                                    return response;
+                                });
+                        },
+                        actionDraft: function (draftToSave) {
+                            $window.sessionStorage.setItem(options.draftKey, JSON.stringify(draftToSave));
                         }
                     };
                   
@@ -165,6 +180,9 @@ EntityViews.factory('entityManagerView', function (createOrUpdateDialog, removeD
                         $log.debug('entityManager created new entity');
                         crudOps.updateList();
                     });        
+                },
+                getDraft: function () {
+                    return JSON.parse($window.sessionStorage.getItem(options.draftKey));
                 }
             };
             angular.extend(crudOps, options);

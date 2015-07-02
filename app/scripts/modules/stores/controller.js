@@ -3,10 +3,12 @@
 	'use strict';
 	
 	var StoreViewController = 
-		function ($templateCache, authService, storeService, categoryService, categoryCreateOrUpdateMixin, entityManagerView) {
+		function ($templateCache, authService, storeService, categoryService,
+		categoryCreateOrUpdateMixin, entityManagerView) {
 		// Controller for the Store view
 		var storeController = this,
 			opts = {
+				draftKey: 'lyb.store.draft',
 	      		entityService: storeService,
 		        size: 'lg',
 		        createTemplate: $templateCache.get('store_create'),

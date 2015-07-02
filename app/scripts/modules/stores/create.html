@@ -129,6 +129,12 @@
       Cancel
   </a> <!-- van anchors porque si es button, submitea el form -->
   
+  <a class="btn btn-default"
+     ng-click="createController.ok('draft')"
+     ng-class="{ 'hidden': createController.entityErrors.length > 0 }"
+     ng-disabled="createController.isClean() || createController.entity._id"
+     class="btn btn-success">remember</a>
+
   <button id="ok_button"
     type="submit"
     ng-class="{ 'hidden': createController.entityErrors.length > 0 }"
