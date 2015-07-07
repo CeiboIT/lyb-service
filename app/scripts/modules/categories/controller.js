@@ -44,8 +44,16 @@
 
 		entityManagerView.createFor(opts)
 			.then(function(entityManager) {
+				var _edit = entityManager.edit;
 				categoryController.entityManager = entityManager;
 				categoryController.entityManager.filterFn = filterCategories;
+				
+				categoryController.entityManager.edit = function (category, parent) {
+					if (parent) {
+						category.parent = { _id: parent._id, title: parent.title };
+					}
+					return _edit(category);
+				};
 			});
 	}]);
 

@@ -58,7 +58,30 @@
 		return service;
 	};
 
+	var parentCategoriesDirective = function (categoryService) {
+		return {
+			restrict: 'E',
+			scope: {
+				isAdmin: '=',
+				category: '='
+			},
+			templateUrl: 'scripts/modules/categories/parent-categories.html',
+			controllerAs: 'controller',
+			controller: function ($scope) {
+				var controller = this;
+				controller.required = $scope.isAdmin;
+				controller.entity = $scope.category;
+				controller.editing = controller.entity._id !== undefined;
+				categoryService.getParents()
+					.then(function (parents) {
+						controller.parents = parents; 
+					});
+			}
+		};
+	};
+
 	angular.module('categories')
+		.directive('parentCategories', parentCategoriesDirective)
 		.factory('collectCategoryId', collectCategoryId)
 		.factory('categoryCreateOrUpdateMixin', categoryCreateOrUpdateMixin)
 		.factory('categoryService', categoryService);
